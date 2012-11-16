@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title> by </title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1></h1>
+        <p></p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="" class="button fork"><strong>Fork On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="" class="button">ZIP</a></li>
+            <li><a href="" class="button">TAR</a></li>
+          </ul>
+        </div>
+
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1 id="cifre-diverse-di-un-numero-rappresentato-in-una-certa-base">cifre diverse di un numero rappresentato in una certa base</h1>
+<p>Dire quale output produrrebbe l'esecuzione del seguente programma</p>
+<pre><code>#include &lt;stdio.h&gt;
+
+int g(int a, int b, int c)
+{
+    int i;
+    for (; c&gt;0; c/=b)
+        if (a == (c%b)) return 1;
+    return 0;
+}
+
+int f(int a, int b)
+{
+    int n=0;
+    for (; a&gt;0; a /= b)
+        if (!g(a%b, b, a/b))
+            n++;
+    return n;
+}
+
+int main()
+{
+    printf (&quot;%i\n&quot;,f(123,10));
+    printf (&quot;%i\n&quot;,f(1223,10));
+    printf (&quot;%i\n&quot;,f(1*123+1*(123*123*123),123));
+    printf (&quot;%i\n&quot;,f(2+2*123+2*(123*123)+2*(123*123*123),123));
+    return (0);
+}</code></pre>
+<p><code>f</code> calcola il numero di cifre differenti che contiene un certo numero, rappresentato in base b</p>
+<p><code>g</code> controlla se la cifra a è contenuta nella rappresentazione in base <code>b</code> del numero <code>c</code></p>
+
+      </section>
+      <footer>
+        <p>Project maintained by <a href=""></a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
