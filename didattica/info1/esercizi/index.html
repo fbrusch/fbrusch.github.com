@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Fondamenti di Informatica by Francesco Bruschi</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Fondamenti di Informatica</h1>
+        <p>Esercizi di Analisi del Codice</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="" class="button fork"><strong>Fork On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="" class="button">ZIP</a></li>
+            <li><a href="" class="button">TAR</a></li>
+          </ul>
+        </div>
+
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; background-color: #303030; color: #cccccc; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; }
+td.sourceCode { padding-left: 5px; }
+pre, code { color: #cccccc; background-color: #303030; }
+code > span.kw { color: #f0dfaf; }
+code > span.dt { color: #dfdfbf; }
+code > span.dv { color: #dcdccc; }
+code > span.bn { color: #dca3a3; }
+code > span.fl { color: #c0bed1; }
+code > span.ch { color: #dca3a3; }
+code > span.st { color: #cc9393; }
+code > span.co { color: #7f9f7f; }
+code > span.ot { color: #efef8f; }
+code > span.al { color: #ffcfaf; }
+code > span.fu { color: #efef8f; }
+code > span.er { color: #c3bf9f; }
+  </style>
+</head>
+<body>
+<h1 id="esercizio-1">Esercizio 1</h1>
+<p>Indicare che output produrrebbe l'esecuzione del seguente codice</p>
+<pre class="sourceCode c"><code class="sourceCode c">    
+    
+    <span class="ot">#include &lt;stdio.h&gt;</span>
+    
+    <span class="dt">int</span> g(<span class="dt">int</span> a, <span class="dt">int</span> b,<span class="dt">int</span> c)
+    {
+        <span class="kw">for</span> (; c &gt; <span class="dv">0</span>; c /= b)
+            <span class="kw">if</span> ((c % b)==a) <span class="kw">return</span> <span class="dv">1</span>;
+    }</code></pre>
+<h1 id="esercizio-2">Esercizio 2</h1>
+<p>Dire quale output produrrebbe l'esecuzione del seguente programma</p>
+<pre class="sourceCode c"><code class="sourceCode c">    
+    
+    <span class="ot">#include &lt;stdio.h&gt;</span>
+    
+    <span class="dt">int</span> g(<span class="dt">int</span> a, <span class="dt">int</span> b, <span class="dt">int</span> c)
+    {
+        <span class="dt">int</span> i;
+        <span class="kw">for</span> (; c&gt;<span class="dv">0</span>; c/=b)
+            <span class="kw">if</span> (a == (c%b)) <span class="kw">return</span> <span class="dv">1</span>;
+        <span class="kw">return</span> <span class="dv">0</span>;
+    }
+    
+    <span class="dt">int</span> f(<span class="dt">int</span> a, <span class="dt">int</span> b)
+    {
+        <span class="dt">int</span> n=<span class="dv">0</span>;
+        <span class="kw">for</span> (; a&gt;<span class="dv">0</span>; a /= b)
+            <span class="kw">if</span> (!g(a%b, b, a/b))
+                n++;
+        <span class="kw">return</span> n;
+    }
+    
+    <span class="dt">int</span> main()
+    {
+        printf (<span class="st">&quot;%i</span><span class="ch">\n</span><span class="st">&quot;</span>,f(<span class="dv">123</span>,<span class="dv">10</span>));
+        printf (<span class="st">&quot;%i</span><span class="ch">\n</span><span class="st">&quot;</span>,f(<span class="dv">1223</span>,<span class="dv">10</span>));
+        printf (<span class="st">&quot;%i</span><span class="ch">\n</span><span class="st">&quot;</span>,f(<span class="dv">1</span>*<span class="dv">123+1</span>*(<span class="dv">123</span>*<span class="dv">123</span>*<span class="dv">123</span>),<span class="dv">123</span>));
+        printf (<span class="st">&quot;%i</span><span class="ch">\n</span><span class="st">&quot;</span>,f(<span class="dv">2+2</span>*<span class="dv">123+2</span>*(<span class="dv">123</span>*<span class="dv">123</span>)+<span class="dv">2</span>*(<span class="dv">123</span>*<span class="dv">123</span>*<span class="dv">123</span>),<span class="dv">123</span>));
+        <span class="kw">return</span> (<span class="dv">0</span>);
+    }</code></pre>
+<h1 id="esercizio-3">Esercizio 3</h1>
+<p>Si indichi l'output prodotto dall'esecuzione del seguente codice</p>
+<pre class="sourceCode c"><code class="sourceCode c">    
+    
+    <span class="ot">#include &lt;stdio.h&gt;</span>
+    
+    <span class="dt">int</span> f(<span class="dt">int</span> n)
+    {
+        <span class="dt">int</span> i;
+        <span class="kw">if</span> (n==<span class="dv">1</span>) <span class="kw">return</span> <span class="dv">0</span>;
+        <span class="kw">for</span> (i=<span class="dv">2</span>;i&lt;n;i++)
+            <span class="kw">if</span> ((n%i) == <span class="dv">0</span>)
+                <span class="kw">return</span> <span class="dv">0</span>;
+        <span class="kw">return</span> <span class="dv">1</span>;
+    }
+    
+    <span class="dt">int</span> g(<span class="dt">int</span> a, <span class="dt">int</span> b)
+    {
+        <span class="dt">int</span> r=<span class="dv">1</span>; <span class="dt">int</span> e;
+        <span class="kw">for</span> (e=<span class="dv">0</span>;(a%r)==<span class="dv">0</span>;r*=b, e++)
+            ;
+        <span class="kw">return</span> e<span class="dv">-1</span>;
+    }
+    
+    <span class="dt">int</span> h(<span class="dt">int</span> a)
+    {
+        <span class="dt">int</span> e=<span class="dv">0</span>; <span class="dt">int</span> i;
+        <span class="kw">for</span> (i=<span class="dv">2</span>;i&lt;=a;i++)
+            <span class="kw">if</span> (g(a,i)&gt;e) e=g(a,i);
+        <span class="kw">return</span> e;
+    }
+    
+    main()
+    {
+        printf (<span class="st">&quot;%i</span><span class="ch">\n</span><span class="st">&quot;</span>,h(<span class="dv">3</span>));
+        printf (<span class="st">&quot;%i</span><span class="ch">\n</span><span class="st">&quot;</span>,h(<span class="dv">10</span>));
+        printf (<span class="st">&quot;%i</span><span class="ch">\n</span><span class="st">&quot;</span>,h(<span class="dv">20</span>));
+        printf (<span class="st">&quot;%i</span><span class="ch">\n</span><span class="st">&quot;</span>,h(<span class="dv">256</span>*<span class="dv">11</span>));
+        printf (<span class="st">&quot;%i</span><span class="ch">\n</span><span class="st">&quot;</span>,h(<span class="dv">1</span>));
+    }</code></pre>
+<h1 id="esercizio-4">Esercizio 4</h1>
+<p>Si indichi quale output produrrebbe l'esecuzinoe del seguente codice</p>
+<pre class="sourceCode c"><code class="sourceCode c">    
+    
+    <span class="ot">#include &lt;stdio.h&gt;</span>
+    
+    <span class="dt">int</span> f(<span class="dt">char</span> a[], <span class="dt">char</span> b)
+    {
+        <span class="dt">int</span> i, n=<span class="dv">0</span>;
+        <span class="kw">for</span> (i=<span class="dv">0</span>;a[i]!=&#39;\<span class="dv">0</span>&#39;;i++)
+            <span class="kw">if</span> (a[i]==b) n++;
+        <span class="kw">return</span> n;
+    }
+    
+    <span class="dt">char</span> g(<span class="dt">char</span> a[])
+    {
+        <span class="dt">char</span> c; <span class="dt">int</span> i,m=<span class="dv">0</span>;
+        <span class="kw">for</span> (i=<span class="dv">0</span>;a[i]!=&#39;\<span class="dv">0</span>&#39;;i++)
+            <span class="kw">if</span> (f(a,a[i])&gt;m)
+            { c=a[i]; m=f(a,a[i]);}
+        <span class="kw">return</span> c;
+    }
+    
+    <span class="dt">int</span> main()
+    {
+        printf (<span class="st">&quot;%c</span><span class="ch">\n</span><span class="st">&quot;</span>,g(<span class="st">&quot;quare id faciam&quot;</span>));
+        printf (<span class="st">&quot;%c</span><span class="ch">\n</span><span class="st">&quot;</span>,g(<span class="st">&quot;fortasse requiris&quot;</span>));
+        printf (<span class="st">&quot;%c</span><span class="ch">\n</span><span class="st">&quot;</span>,g(<span class="st">&quot;nescio, sed fieri sentior, et exrucior&quot;</span>));
+    }
+    </code></pre>
+</body>
+</html>
+
+      </section>
+      <footer>
+        <p>Project maintained by <a href="">Francesco Bruschi</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
+
