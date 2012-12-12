@@ -9,7 +9,7 @@ Fino ad ora, gestire le liste è stato qualcosa di molto _fastidioso_, nell'acce
 Osservazione: non vi sembra che le liste abbiano qualcosa di inquietantemente _ricorsivo_?
 
 Immaginiamo di dover realizzare una funzione che stampa gli elementi di una lista di caratteri. Ci viene passato il puntatore al primo nodo. Mi pare che potremmo fare così: stampiamo il carattere del nodo che ci viene passato, e poi stampiamo la lista che ci resta. Come facciamo ad ottenere la lista che ci resta? E' facile: prendiamo il puntatore al nodo successivo! Il puntatore al nodo successivo _identifica_ un'altra lista: precisamente la lista dei caratteri dopo quello corrente.
-    
+
      |P0|-->|'c'||---+
                      |
      |P1|    ------->+---->|'i'||---->|'a'||---->|'o'||----->NULL
@@ -29,16 +29,85 @@ Ecco allora la funzione che stampa la nostra lista:
 
 {% highlight c %}
 
-typedef struct nodo {char carattere; struct nodo* prossimo} nodo;
-
-void print_lista(nodo *lista)
+struct nodo
 {
-    if (lista->prossimo == NULL)
+    char dato;
+    struct nodo *prossimo;
+};
+
+void stampa_lista(struct nodo *lista)
+{
+    if (lista==NULL)
+    {
         printf ("\n");
+        return;
+    }
 
-    printf("%c",lista->carattere);
-    print_lista(lista->prossimo);
-
+    printf ("%c",lista->dato);
+    stampa_lista(lista->prossimo);
 }
 
 {% endhighlight %}
+
+Proviamo ad applicare lo stesso concetto per scrivere una funzione che calcola la lunghezza di una lista. Il ragionamento è questo:
+
+1. se la lista è vuota (cioè se il puntatore al primo elemento è `NULL`), la lunghezza è `0`
+2. altrimenti, la lunghezza è `1` (l'elemento corrente) più la lunghezza della lista successiva al primo elemento.
+
+Per comodità, ci riferiremo d'ora in poi al primo elemento della lista come alla _testa_, e al resto della lista come alla _coda_.
+
+
+{% highlight c %}
+
+int len(struct nodo *lista)
+{
+    if (lista==NULL)
+        return 0;
+    return 1 // lunghezza della testa (1)
+        +len(lista->prossimo); // lunghezza della coda (len(lista->prossimo))
+}
+
+{% endhighlight %}
+
+Ora cerchiamo di implementare la funzione `append` che tanto invidiamo ai nostri amici pythonisti. Il ragionamento, in questo caso, è:
+
+1. se la _coda_ della lista è vuota (cioè se la lista è composta solo dalla _testa_), allora aggiungi direttamente il nuovo nodo alla testa
+2. altrimenti, fai `append` del nuovo nodo sulla _coda_.
+
+{% highlight c %}
+
+void append(struct nodo *lista, char c)
+{
+
+    if (lista==NULL)
+
+    if (lista->prossimo==NULL)
+    {
+        lista->prossimo=malloc(sizeof(struct nodo));
+        (lista->prossimo)->dato=c;
+        (lista->prossimo)->prossimo=NULL;
+        return;
+    }
+    append(lista->prossimo, c);
+}
+
+{% endhighlight %}
+
+Ora poniamoci finalmente il problema di stampare il contenuto della nostra lista al contrario. Anche qui possiamo avvalerci del ragionamento ricorsivo, in questo modo:
+
+1. se la lista è vuota, non stampare niente
+2. se la lista non è vuota, prendine la _coda_, stampala al contrario, e *poi* stampa la _testa_.
+
+{% highlight c %}
+
+void stampa_lista_contrario(struct nodo *lista)
+{
+    if (lista==NULL)
+        return;
+    stampa_lista_contrario(lista->prossimo);
+    printf ("%c",lista->dato);
+}
+
+{% endhighlight %}
+
+[Qui](nodo.c) trovate un esempio completo di utilizzo delle nostre funzioni...
