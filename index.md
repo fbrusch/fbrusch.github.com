@@ -9,9 +9,9 @@ author: Francesco Bruschi
 
 - [Fondamenti di Informatica](didattica/fondamenti)
 
-## Progetti
+<!--## Progetti-->
 
-- [Codelab](progetti/codelab)
-- [MoKa](progetti/moka)
-- [Continuous](progetti/continuous)
-- [Controlled Execution](progetti)
+<!--- [Codelab](progetti/codelab)-->
+<!--- [MoKa](progetti/moka)-->
+<!--- [Continuous](progetti/continuous)-->
+<!--- [Controlled Execution](progetti)-->
