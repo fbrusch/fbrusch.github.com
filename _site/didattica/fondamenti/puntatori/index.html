@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Appunti Sparsi</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1> </h1>
+</div>
+
+<div class="row">
+  <div class="span12" style="width: 90%">
+    <h1 id='la_memoria_e_il_c'>La memoria e il C</h1>
+
+<p>Cercheremo di capire come il C gestisce la memoria. Perché ce ne dovrebbe fregare?</p>
+
+<p>Perché imparando a gestire la memoria possiamo lavorare con strutture dati la cui dimensione è <em>variabile</em> durante l&#8217;esecuzione! Niente più array sovradimensionati, o troppo piccoli, o troppo grandi! In molti altri linguaggi di &#8220;più alto livello&#8221; (Python, Ruby, Lisp) è possibile far variare, per esempio, la dimensione degli array durante l&#8217;esecuzione del programma, senza preoccuparsi dei dettagli. Il C richiede più attenzione, e più consapevolezza dei meccanismi con cui le variabili vengono gestite.</p>
+
+<h2 id='mamma_da_dove_nascono_le_variabili_e_quando_muoiono_dove_vanno'>Mamma, da dove nascono le variabili? E quando muoiono, dove vanno?</h2>
+
+<p>Consideriamo il seguente codice:</p>
+<div class='highlight'><pre><code class='c'>    <span class='kt'>int</span> <span class='nf'>main</span><span class='p'>()</span>
+    <span class='p'>{</span>
+     <span class='kt'>int</span> <span class='n'>a</span><span class='p'>;</span>
+        
+     <span class='k'>for</span> <span class='p'>(</span><span class='n'>a</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>a</span><span class='o'>&lt;</span><span class='mi'>10</span><span class='p'>;</span><span class='n'>a</span><span class='o'>++</span><span class='p'>)</span>
+      <span class='n'>printf</span> <span class='p'>(</span><span class='s'>&quot;%i</span><span class='se'>\t</span><span class='s'>&quot;</span><span class='p'>,</span><span class='n'>a</span><span class='p'>);</span>
+    <span class='p'>}</span>
+</code></pre>
+</div>
+<p>Concentriamoci su: <code>int a</code>. In che modo questa dichiarazione viene interpretata dal compilatore? Come sappiamo, tutti i dati che servono all&#8217;esecuzione del programma vengono memorizzati nella&#8230; <em>memoria</em>. Ricordiamo che, per quello che ci riguarda, la memoria può essere modellizzata come una tabella di celle numerate, nelle quali è possibile scrivere, e dalle quali è possibile leggere. Ogni cella può contenere una sequenza di bit di una certa dimensione, tipicamente una potenza di 2 (8, 16, 32 bit)</p>
+
+<p>In un certo momento, lo stato della memoria sarà qualcosa del tipo:</p>
+<table><thead><tr><th>Indirizzo</th><th>Dat</th></tr></thead><tbody><tr><td style='text-align: left;'>1</td><td style='text-align: left;'>00000000</td>
+</tr><tr><td style='text-align: left;' /><td style='text-align: left;' />
+</tr><tr><td style='text-align: left;'>2</td><td style='text-align: left;'>00001100</td>
+</tr><tr><td style='text-align: left;'>3</td><td style='text-align: left;'>01011010</td>
+</tr><tr><td style='text-align: left;'>4</td><td style='text-align: left;'>10100100</td>
+</tr><tr><td style='text-align: left;'>&#8230;..</td><td style='text-align: left;'>&#8230;&#8230;..</td>
+</tr><tr><td style='text-align: left;'>100</td><td style='text-align: left;'>00101010</td>
+</tr><tr><td style='text-align: left;'>&#8230;..</td><td style='text-align: left;' />
+</tr></tbody></table>
+<p>Per scrivere un dato, è necessario fornire il numero della riga (_indirizzo_) e il dato da scrivere (_dato_)</p>
+
+<p>Ok, torniamo al problema di come nascono le variabili, e dell&#8217;interpretazione della dichiarazione <code>int a</code>. Quando il compilatore incontra <code>int a</code>, capisce che, nel codice che segue, faremo riferimento ad <code>a</code> come ad una variabile di valore intero. Quello che il compilatore fa è di prenotare (_allocare_) una locazione di memoria per contenere il valore della variabile <code>a</code>. Se una cella sola non basta, perché per esempio gli interi che utilizziamo necessitano di 16 bit per essere rappresentati, mentre le celle della memoria sono a singolo byte (8 bit), il compilatore alloca tante celle quante ne servono per memorizzare il dato. Ma cosa vuole dire che il compilatore <em>alloca</em> memoria per la variabile <code>a</code>? Vuol dire che sceglie un pezzetto di memoria per contenere <code>a</code> (un erto numero di celle contigue), e <em>si segna</em> da qualche parte che quella memoria è <em>riservata</em> ad <code>a</code>. Cioè, da qualche parte, il compilatore si segna questa informazione: &#8220;la variabile <code>a</code> è memorizzata in due celle, a partire dall 100&#8221;. In questo modo, se dovesse incontrare un&#8217;altra dichiarazione, tipo <code>char b</code>, avrebbe tutta l&#8217;informazione per allocare una zona di memoria diversa. Ora: successivamente, tutte le operazioni che utilizzano il valore di <code>a</code> vengono trasformate in letture alle celle 100 e 101, e tutte quelle che modificano il valore di <code>a</code> vengono tradotte in scritture alle stesse celle.</p>
+
+<p>E per gli array?</p>
+
+<pre><code>int a[10];</code></pre>
+
+<p>Quando il compilatore incontra questa dichiarazione, alloca spazio contiguo sufficiente per memorizzare tutti gli elementi dell&#8217;array (in questo caso, ad esempio, continuando a considerare l&#8217;ipotesi che un intero occupi due celle di memoria, il compilatore potrebbe allocare la memoria dall&#8217;indirizzo 100 al 119.</p>
+
+<p>Notare come tutte queste cose avvengano al momento della compilazione. Il motivo per cui non abbiamo potuto utilizzare, fino ad ora, strutture dati dinamiche, tipo array la cui dimensione è stabilita <em>durante l&#8217;esecuzione</em> (a <em>runtime</em>) piuttosto che durante la compilazione (a <em>compile time</em>), è che abbiamo lasciato fare tutto il lavoro di allocazione della memoria al compilatore. E&#8217; il momento di assurmerci le nostre responsabilità, e prendere in mano il nostro destino.</p>
+
+<h2 id='lallocazione_dinamica_della_memoria'>L&#8217;allocazione dinamica della memoria</h2>
+
+<p>Nella libreria standard C esiste una funzione che consente di <em>riservare</em> della memoria durante l&#8217;esecuzione del programma. L&#8217;unica informazione richiesta è la quantità di memoria che serve. La funzione si chiama <code>malloc</code>. E così la chiamata:</p>
+
+<pre><code>malloc(10)</code></pre>
+
+<p>alloca 10 parole di memoria. <code>malloc</code> controlla se in memoria ci sono 10 celle libere. Se sì, si segna in una tabella che sono occupate e&#8230; attenzione: <em>restituisce l&#8217;indirizzo della prima delle celle occupate</em>. L&#8217;indirizzo? E cosa me ne faccio, dell&#8217;indirizzo?</p>
+
+<h2 id='i_puntatori'>I puntatori</h2>
+
+<p>Si da il caso che, in C, sia possibile accedere direttamente alla cella di memoria ad un certo indirizzo, se lo si conosce. Capiamoci con un caso concreto. Consideriamo la nostra solita dichiarazione:</p>
+
+<pre><code>int c;</code></pre>
+
+<p>Abbiamo capito che il compilatore assocerà al nome di variabile <code>c</code> un indirizzo in memoria. Ebbene, esiste il modo di sapere qual è questo indirizzo! Questo è possibile con l&#8217;operatore <code>&amp;</code>: <code>&amp;c</code> è un espressione che ha il valore dell&#8217;indirizzo in memoria della variabile <code>c</code>! E che ce ne facciamo, dell&#8217;indirizzo di <code>c</code>, una volta che l&#8217;abbiamo ottenuto? Beh, possiamo per esempio memorizzarlo in una variabile:</p>
+
+<pre><code>a = &amp;c;</code></pre>
+
+<p>Ma che di che tipo deve essere, <code>a</code>? Lo vediamo tra un attimo. L&#8217;indirizzo in memoria di una variabile si chiama anche <em>puntatore</em> a quella variabile. Dopo l&#8217;assegnamento di sopra, <code>a</code> contiene il puntatore a <code>c</code>. Si dice anche che <em><code>a</code> punta a <code>c</code></em>. Ora chiediamoci: che altro posso fare, con un puntatore? Un&#8217;altra cosa notevole che posso fare è <em>accedere alla locazione di memoria alla quale il puntatore punta</em>. Saltando l&#8217;intermediazione del compilatore! Questo è possibile tramite l&#8217;operatore <code>*</code>. Immaginiamo di voler scrivere il valore <code>1</code> alla locazione di memoria il cui indirizzo è il valore della variabile <code>a</code>. La cosa si fa così:</p>
+
+<pre><code>*a = 1;</code></pre>
+
+<p>In questo modo abbiamo scritto <code>1</code> alla locazione di memoria alla quale punta <code>a</code>. Ma sopra avevamo fatto in modo che <code>a</code> &#8216;puntasse&#8217; a <code>c</code>. Quindi, secondo voi, cosa stamperà la seguente chiamata a <code>printf</code>?</p>
+
+<pre><code>printf (&quot;%i&quot;,c);</code></pre>
+
+<p>L&#8217;operatore <code>*</code> si può usare anche per leggere dalla memoria:</p>
+
+<pre><code>printf (&quot;%i&quot;,*a);</code></pre>
+
+<p>Ok, ora poniamoci il problema del tipo della variabile <code>a</code>. Che cosa contiene la variabile <code>a</code>? Contiene un puntatore ad un valore intero. Quindi l&#8217;espressione <code>*a</code> è un valore intero. Cioè <code>*a</code> è un <code>int</code>. Allora, se vogliamo dichiarare <code>a</code> come puntatore ad intero, la dichiarazione è:</p>
+
+<pre><code>int *a;</code></pre>
+
+<p>Bene. Torniamo alla <code>malloc</code>. Abbiamo detto che malloc ritorna l&#8217;indirizzo alla prima cella di memoria allocata. Se questo è vero, potremmo &#8220;creare&#8221; autonomamente una variabile intera, dichiarando un puntatore, allocando la memoria per contenere il dato, e facendo puntare il puntatore a quella zona di memoria. E&#8217; molto più facile a farsi:</p>
+<div class='highlight'><pre><code class='c'>    
+    <span class='kt'>int</span> <span class='o'>*</span><span class='n'>p</span><span class='p'>;</span>  
+    
+    <span class='n'>p</span><span class='o'>=</span><span class='n'>malloc</span><span class='p'>(</span><span class='n'>Hey</span> <span class='n'>un</span> <span class='n'>momento</span><span class='o'>!</span><span class='p'>);</span>
+    
+</code></pre>
+</div>
+<p>Hey, un momento? Quanta memoria mi serve, per contenere un intero? In generale, non siamo tenuti a saperlo. Per fortuna esiste una funzione speciale, <code>sizeof</code>, con cui possiamo ottenere quest&#8217;informazione. Il numero di parole che serve per contenere un intero è quindi <code>sizeof(int)</code>. E, quindi, per allocare memoria per un intero, facciamo così:</p>
+
+<pre><code>p=malloc(sizeof(int));</code></pre>
+
+<p>A questo punto, possiamo usare <code>*p</code> per accedere alla zona di memoria che abbiamo appena allocato, e che contiene un intero. Non è fantastico?</p>
+
+<pre><code>*p=1;
+(*p)++
+printf (&quot;%i&quot;,*p)</code></pre>
+
+<h2 id='e_gli_array'>E gli array?</h2>
+
+<p>Ebbene, abbiamo un puntatore, memorizzato nella variabile <code>c</code>, di tipo puntatore. Sappiamo che <code>*c</code> ci consente di accedere alla cella di memoria &#8220;puntata&#8221; da <code>c</code>. Ma a noi piace esplorare. E quindi ci chiediamo: che succede se cerchiamo di accedere a <code>c+1</code>? Facciamo questo esperimento:</p>
+
+<pre><code>int a[2]={10,20};
+c = &amp;a[0];
+printf (&quot;%i&quot;,*c);
+printf (&quot;%i&quot;,*(c+1));</code></pre>
+
+<p>Cosa succede? Succede che gli elementi dell&#8217;array <code>a</code>, come possiamo immaginare, sono memorizzati, in memoria, tutti in sequenza. Quindi, se otteniamo l&#8217;indirizzo del primo elemento, <code>a[0]</code>, che d&#8217;ora in poi chiamareremo <em>base</em> dell&#8217;array, possiamo ottenere gli indirizzi degli altri, sommando alla base un valore intero. Ora, aprite bene gli occhi, ecco un paio di equivalenze notevoli in C:</p>
+
+<pre><code>a == &amp;a[0]
+a[n] == *(a+n)</code></pre>
+
+<p>Queste due uguaglianze sono sempre vere! Cioè: se abbiamo dichiarato un array <code>a</code> con <code>int a[10]</code>, l&#8217;espressione <code>a</code> da sola rappresenta l&#8217;indirizzo al primo elemento, cioè la base! Quindi: quando dichiariamo un array, stiamo dichiarando un puntatore e contemporaneamente, stiamo chiedendo al compilatore di allocare la memoria necessaria per contenere gli elementi dell&#8217;array e di far puntare il puntatore all&#8217;inizio della zona di memoria allocata. Beh, se ci riflettiamo, ora sappiamo farlo anche noi, senza bisogno dell&#8217;aiuto del compilatore. E, soprattutto, possiamo farlo a run time!</p>
+
+<p>Ecco un esempio:</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int *a;
+    int i,n;
+    printf (&quot;quanto lo vuoi lungo, l&#39;array?&quot;);
+    scanf(&quot;%i&quot;,&amp;n);                                 
+    a=malloc(sizeof(int)*n);    // alloca lo spazio per l&#39;array, e fai puntare
+                                // a allo spazio allocato
+    for (i=0;i&lt;n;i++)           // riempi l&#39;array di valori
+        a[i]=i;                 
+    for (i=0;i&lt;n;i++)           // stampa i valori dell&#39;array
+        printf(&quot;%i&quot;,a[i])
+}</code></pre>
+
+<p>Dal codice sopra, possiamo finalmente anche capire la ragione dell&#8217;operatore <code>&amp;</code> prima della variabile in cui vogliamo memorizzare il dato richiesto dalla <code>scanf</code>. Il fatto è questo: in C, come abbiamo visto, tutte le variabili sono passate <em>per valore</em>. Cioè, chiamiamo una funzione, <code>f(e)</code>, dove <code>e</code> è una qualsiasi espressione, quello che succede è che:</p>
+
+<ul>
+<li>il valore di <code>e</code> viene valutato</li>
+
+<li>una <em>copia</em> del valore di <code>e</code> viene passata a <code>f</code> Quindi, se <code>e</code> è una variabile, a <code>f</code> viene passato il valore di <code>e</code>, ed <code>f</code> non può in nessun modo cambiare il contenuto della variabile <code>e</code>. &#8220;Ma <code>scanf</code> il valore lo cambia!&#8221;, vi sento dire! E avete ragione! Ma la cosa va così: a <code>scanf</code> non viene passato il valore della variabile nella quale memorizzare il dato, bensì <em>un puntatore ad essa</em>! In questo modo, <code>scanf</code> può accedere direttamente alla zona di memoria in cui è memorizzata la variabile in cui mettere il dato. Proviamo a fare qualcosa di analogo, e che non potremmo fare senza puntatori: una funzione che scambia il valore di due variabili.</li>
+</ul>
+<br />
+<pre><code>void f(int *a, int *b)
+{
+    int temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}</code></pre>
+
+<p>Et voilà!</p>
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy;  2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+

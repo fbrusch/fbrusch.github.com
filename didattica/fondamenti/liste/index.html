@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN"
+    "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">
+<html xml:lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:svg='http://www.w3.org/2000/svg'>
+<head><meta http-equiv='Content-type' content='application/xhtml+xml;charset=utf-8' /><title></title></head>
+<body>
+<p>Ora sappiamo come costruire array di dimensioni desiderate a runtime. Possiamo così scrivere programmi del tipo:</p>
+
+<pre><code>int *a;
+int n,i;
+
+printf (&quot;quanti numeri devo leggere?\n&quot;);
+scanf (&quot;%i&quot;,&amp;n);
+a = malloc(sizeof(int)*n);
+for (i=0;i&lt;n;i++)
+    scanf(&quot;%i&quot;a+i);
+
+/* fai qualcosa con gli elementi di a */</code></pre>
+
+<p>Però gli array dinamici non sono ancora la struttura dinamica più flessibile che possiamo immaginare. Per esempio, linguaggi come Python offrono strutture che consentono di fare cose notevoli come queste:</p>
+
+<pre><code>&gt;&gt;&gt; a = [1,2,3]
+&gt;&gt;&gt; print a
+[1, 2, 3]
+&gt;&gt;&gt; a.append(4)
+&gt;&gt;&gt; print a
+[1, 2, 3, 4]</code></pre>
+
+<p>In questo esempio, <code>a</code> è un array dinamico, che viene inizializzato con un certo insieme di valori, e che può poi crescere a piacimento. I vantaggi della disponibilità di una struttura dati di questo tipo sono evidenti: non è necessario prevedere, al momento dell&#8217;allocazione, la quantità di memoria che servirà per contenere i dati, perché questa si può adattare all&#8217;occorrenza.</p>
+
+<p>Prima di vedere se riusciamo ad ottenere la flessibilità degli array di Python in C, consideriamo un altro approccio alla dinamicità delle strutture dati nel nostro amato linguaggio. Quello che potremmo fare è una cosa del genere: immaginiamo di voler memorizzare un testo scritto dall&#8217;utente in un array. Non sappiamo quanto sarà lungo il testo. Immaginiamo questa situazione: vogliamo chiedere in input all&#8217;utente una sequenza di caratteri che rappresenti una frase in lingua italiana. La frase è una sequenza di caratteri, terminata da un carattere <em>punto</em> <code>&#39;.&#39;</code>.</p>
+
+<p>Cominciamo con il dichiarare una lunghezza iniziale:</p>
+
+<pre><code>#define DIM 16
+
+[...]
+
+int *text;
+int i;
+char c:
+[...]
+
+text = malloc(sizeof(char)*DIM);
+i=0;
+do 
+{
+    scanf (&quot;%c&quot;,&amp;c);
+    text[i++]=c;
+} while (c!=&#39;.&#39; &amp;&amp; i&lt;DIM);</code></pre>
+
+<p>Il codice sopra dimensiona un array <code>a</code> in grado di memorizzare <code>DIM</code> caratteri e poi, nel ciclo <code>for</code>, chiede in input <code>DIM</code> caratteri. Cosa succede se, alla fine del ciclo</p>
+</body></html>

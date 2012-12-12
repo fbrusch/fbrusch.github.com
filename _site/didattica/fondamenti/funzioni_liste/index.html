@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Gestione Liste</title>
+    
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Appunti Sparsi</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Gestione Liste </h1>
+</div>
+
+<div class="row">
+  <div class="span12" style="width: 90%">
+    <p>Fino ad ora, gestire le liste è stato qualcosa di molto <em>fastidioso</em>, nell&#8217;accezione di <em>poco scalabile</em>. Ogni nuovo elemento aggiunto richiede di gestire un ulteriore livello di redirezione (<code>-&gt;</code>), e in breve tempo il tutto diventa intrattabile. Vedremo ora come usare il potere dell&#8217;induzione ricorsiva per liberarci da questa sofferenza.</p>
+
+<p>Osservazione: non vi sembra che le liste abbiano qualcosa di inquietantemente <em>ricorsivo</em>?</p>
+
+<p>Immaginiamo di dover realizzare una funzione che stampa gli elementi di una lista di caratteri. Ci viene passato il puntatore al primo nodo. Mi pare che potremmo fare così: stampiamo il carattere del nodo che ci viene passato, e poi stampiamo la lista che ci resta. Come facciamo ad ottenere la lista che ci resta? E&#8217; facile: prendiamo il puntatore al nodo successivo! Il puntatore al nodo successivo <em>identifica</em> un&#8217;altra lista: precisamente la lista dei caratteri dopo quello corrente.</p>
+
+<pre><code> |P0|--&gt;|&#39;c&#39;||---+
+                 |
+ |P1|    -------&gt;+----&gt;|&#39;i&#39;||----&gt;|&#39;a&#39;||----&gt;|&#39;o&#39;||-----&gt;NULL</code></pre>
+
+<p>Nel caso sopra, al puntatore <code>P0</code> corrisponde la lista <code>[&#39;c&#39;,&#39;i&#39;,&#39;a&#39;,&#39;o&#39;]</code>, mentre al puntatore <code>P1</code> corrisponde la lista <code>[&#39;i&#39;,&#39;a&#39;,&#39;o&#39;]</code>.</p>
+
+<p>Poniamoci allora il problema di come scrivere una funzione che stampi gli elementi di una lista. Ebbene, chiediamoci:</p>
+
+<ol>
+<li><em>se fossimo</em> in grado di stampare una lista di lunghezza <code>N</code>, saremmo in grado di stampare anche una lista di lunghezza <code>N+1</code>?</li>
+
+<li>siamo in grado di stampare una lista di lunghezza <code>0</code>?</li>
+</ol>
+
+<p>Se ci sentiamo di rispondere &#8216;sì&#8217; ad entrambe le domande sopra, allora siamo in grado di stampare qualsiasi lista!</p>
+
+<p>Scriviamo quindi, per prima cosa, una funzione che ci dimostri che sappiamo rispondere alla domanda 2. Come facciamo a sapere che una lista è di lunghezza <code>0</code>? Semplice: il puntatore al primo nodo punterà a <code>NULL</code>!</p>
+
+<p>Ecco allora la funzione che stampa la nostra lista:</p>
+<div class='highlight'><pre><code class='c'><span class='k'>typedef</span> <span class='k'>struct</span> <span class='n'>nodo</span> <span class='p'>{</span><span class='kt'>char</span> <span class='n'>carattere</span><span class='p'>;</span> <span class='k'>struct</span> <span class='n'>nodo</span><span class='o'>*</span> <span class='n'>prossimo</span><span class='p'>}</span> <span class='n'>nodo</span><span class='p'>;</span>
+
+<span class='kt'>void</span> <span class='nf'>print_lista</span><span class='p'>(</span><span class='n'>nodo</span> <span class='o'>*</span><span class='n'>lista</span><span class='p'>)</span>
+<span class='p'>{</span>
+    <span class='k'>if</span> <span class='p'>(</span><span class='n'>lista</span><span class='o'>-&gt;</span><span class='n'>prossimo</span> <span class='o'>==</span> <span class='nb'>NULL</span><span class='p'>)</span>
+        <span class='n'>printf</span> <span class='p'>(</span><span class='s'>&quot;</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+
+    <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;%c&quot;</span><span class='p'>,</span><span class='n'>lista</span><span class='o'>-&gt;</span><span class='n'>carattere</span><span class='p'>);</span>
+    <span class='n'>print_lista</span><span class='p'>(</span><span class='n'>lista</span><span class='o'>-&gt;</span><span class='n'>prossimo</span><span class='p'>);</span>
+
+<span class='p'>}</span>
+</code></pre>
+</div>
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy;  2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    
+  </body>
+</html>
+
