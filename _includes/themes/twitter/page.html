@@ -6,5 +6,7 @@
   <div class="span12" style="width: 90%">
     {{ content }}
   </div>
-  {% include JB/comments %}
+    {% if page.comments %}
+      {% include JB/comments %}
+    {% endif %}
 </div>

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Pensieri Sparsi
+title: Appunti Sparsi
 author: Francesco Bruschi
 
 ---
