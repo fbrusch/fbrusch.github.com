@@ -1,5 +1,10 @@
-title : Appunti Sparsi
+title: Appunti Sparsi
 author: Francesco Bruschi
 markdown: maruku
 pygments: True
-
+JB:
+    analytics: 
+        provider: google
+        google:
+            tracking_id: 'UA-36402304-1'
+safe: true

@@ -111,3 +111,58 @@ void stampa_lista_contrario(struct nodo *lista)
 {% endhighlight %}
 
 [Qui](nodo.c) trovate un esempio completo di utilizzo delle nostre funzioni...
+
+### Implementazione iterativa
+La ricorsione è un mezzo molto potente ed espressivo, e consente di risolvere alcuni problemi in modo estremamente elegante. Ricordiamo però che l'esecuzione di una funzione ricorsiva può essere anche molto onerosa. Ad esempio, la profondità di ricorsione della nostre funzioni è pari al numero degli elementi della lista: se vogliamo aggiungere un elemento in fondo ad una lista di 1.000.000 elementi con la nostra `append`, ci ritroveremo con un 1.000.000 di chiamate annidate, e con i corrispondenti record di attivazione in cima alla pila (vale la pena di notare che alcuni compilatori sono in grado di ottimizzare un particolare tipo di ricorsione, detta "[in coda](http://en.wikipedia.org/wiki/Tail_call)", in modo che questa `esplosione` sulla pila non avvenga).
+Proviamo quindi ad implementare, senza ricorrere alla ricorsione (ahah), le funzioni di gestione delle liste viste sopra. Partiamo da quella forse più semplice: la `len`.
+L'idea è questa: prendiamo una variabile, `i`, che utilizziamo in questo modo: inizialmente le assegnamo come valore la testa della lista (cioè, lo ricordiamo, l'indirizzo al primo elemento):
+
+{% highlight c %}
+int len(struct node *l)
+{
+    struct node *i;
+    i=l;
+    [...]
+
+{% endhighlight %}
+
+A questo punto ci troviamo in questa situazione:
+
+    
+    l---+
+        |   
+        +--->| ||---->| ||---->| ||----->NULL
+        |
+    i---|
+
+se ora eseguiamo il seguente assegnamento:
+
+{% highlight c %}
+
+    i = i->prossimo;
+
+{% endhighlight %}
+
+la situazione diventa questa:
+
+    l---+
+        |   
+        +--->| ||--+->| ||---->| ||---->NULL
+                   |
+    i--------------|
+
+cioè `i` punta al secondo elemento. La strategia è quella di far avanzare `i`, fino a farlo puntare a `NULL`, e nel frattempo contare quanti salti si sono fatti. Riassumiamo tutto in un ciclo `for`:
+
+
+{% highlight c %}
+
+[...]
+int lunghezza;
+for (lunghezza=0, i=l;i!=NULL;i=i->prossimo)
+    ;
+
+{% endhighlight %}
+
+A questo punto, quando il ciclo termina, in `lunghezza` c'è la lunghezza della lista, che possiamo ritornare.
+
+
