@@ -164,5 +164,6 @@ for (lunghezza=0, i=l;i!=NULL;i=i->prossimo)
 {% endhighlight %}
 
 A questo punto, quando il ciclo termina, in `lunghezza` c'è la lunghezza della lista, che possiamo ritornare.
+asd
 
 
