@@ -165,4 +165,4 @@ for (lunghezza=0, i=l;i!=NULL;i=i->prossimo)
 
 A questo punto, quando il ciclo termina, in `lunghezza` c'è la lunghezza della lista, che possiamo ritornare.
 
-
+[Qui](liste_iter.c) c'è il codice completo delle funzioni iterative.
