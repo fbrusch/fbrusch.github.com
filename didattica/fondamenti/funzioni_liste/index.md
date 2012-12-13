@@ -2,6 +2,7 @@
 title: Gestione Liste
 author: Francesco Bruschi
 layout: page
+comments: true
 ---
 
 Fino ad ora, gestire le liste è stato qualcosa di molto _fastidioso_, nell'accezione di _poco scalabile_. Ogni nuovo elemento aggiunto richiede di gestire un ulteriore livello di redirezione (`->`), e in breve tempo il tutto diventa intrattabile. Vedremo ora come usare il potere dell'induzione ricorsiva per liberarci da questa sofferenza.

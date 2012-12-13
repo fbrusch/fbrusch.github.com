@@ -7,4 +7,10 @@ JB:
         provider: google
         google:
             tracking_id: 'UA-36402304-1'
+    comments:
+        provider: disqus
+        disqus:
+            short_name: "appunti-sparsi"
+
 safe: true
+
