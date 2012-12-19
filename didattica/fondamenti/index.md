@@ -8,5 +8,6 @@ author: Francesco Bruschi
 -   [puntatori](puntatori)
 -   [strutture dinamiche](liste)
 -   [gestione liste](funzioni_liste)
+-   [sudoku](sudoku)
 
 
