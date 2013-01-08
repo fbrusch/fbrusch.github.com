@@ -1,6 +1,17 @@
 /* Override some defaults */
 html, body {
   background-color: #eee;
+  font-size:1.2em;
+  line-height:1.6em;
+  font-family: Palatino;
+}
+
+code {
+    font-size:15px;
+}
+
+li {
+    line-height:1.3em;
 }
 body {
   padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */

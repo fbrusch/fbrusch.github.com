@@ -9,5 +9,5 @@ author: Francesco Bruschi
 -   [strutture dinamiche](liste)
 -   [gestione liste](funzioni_liste)
 -   [sudoku](sudoku)
-
+-   [file](file)
 

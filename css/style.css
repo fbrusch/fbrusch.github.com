@@ -1,4 +1,7 @@
 .hll { background-color: #ffffcc }
+.p {font-size: 1.2em;
+    line-height: 1.6em
+}
 .err { border: 1px solid #FF0000 } /* Error */
 .k { color: #008000; font-weight: bold } /* Keyword */
 .o { color: #666666 } /* Operator */
