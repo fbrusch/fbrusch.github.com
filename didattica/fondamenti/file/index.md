@@ -84,11 +84,108 @@ Et voilà! I byte che codificano il numero intero alla locazione `&n` sono ora c
 
 Ora si tratta di leggerli...
 
+Per leggerli, possiamo basarci sulla funzione simmetrica di `fwrite`: [`fread`](http://linux.about.com/library/cmd/blcmdl3_fread.htm)
 
-[salva_numero](salva_numero.c)
+{% highlight c %}
 
-[stampa_numero](stampa_numero.c)
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream);
 
+{% endhighlight %}
+
+Il codice del programma che legge il numero che abbiamo scritto nel file e lo stampa lo trovate qui: [stampa_numero](stampa_numero.c)
+
+Il codice per salvare il numero su file invece è: [salva_numero](salva_numero.c)
+
+###File di testo (ASCII)
+
+Nell'esempio precedente, la sequenza di byte presente nel file `numero.dat` rappresenta un numero intero.
+Ci sono file nei quali, invece, ogni byte rappresenta un carattere ASCII. Un esempio è [questo](ofrati.txt). Come forse i più raffinati culturalmente avranno notato, il testo contiene un pedestre errore di trascrizione. Come possiamo correggerlo? 
+Poniamoci questo obiettivo: vogliamo trascrivere il testo in un altro file, del tutto uguale, ma in cui "bruchi" sia stato sostituito con "bruti".
+Tra tutte le innumerevoli possibili soluzioni, vi propongo questa: prendiamo il file originario, lo copiamo in memoria, in una stringa; dopodiché lo scandiamo, carattere per carattere, e trascriviamo ogni carattere in un file destinazione, fino a quando ci imbattiamo nella parola incriminata ("bruchi"): a questo punto, sul file destinazione scriviamo la parola corretta ("bruti"), nella copia in memoria saltiamo la parola incriminata, e continuiamo sereni.
+
+Ok, cominciamo...
+
+Prima di tutto: 
+
+Q: Quanta memoria ci serve, per contenere tutto il file? 
+
+A: Beh, ci servono tanti `char` quanti sono quelli nel file. Visto che nel file ogni carattere è memorizzato con un byte, ci servono tanti `char` quanti sono i byte nel file
+
+Q: Fantastico. Ma: come faccio a sapere quanti byte occupa il file?
+
+A: Uso il seguente trucchetto: apro il file, sposto il puntatore di scrittura alla fine, e vedo quanto è distante dall'inizio. Per fare questo mi servo di due funzioni della libreria `stdio`: [`fseek`](http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#fseek) e [`ftell`](http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#ftell)
+
+`fseek`, in particolare, mi consente di spostarmi nel file, specificando un _offset_ e una _posizione di riferimento_, che può essere: l'inizio del file (`SEEK_SET`), la posizione corrente (`SEEK_CUR`), oppure la fine del file (`SEEK_END`). quindi:
+
+{% highlight c %}
+fseek(f, 0, SEEK_END);
+{% endhighlight %}
+
+ci posiziona, nel file, alla fine (a 0 byte dalla fine).
+A questo punto, `ftell(f)` ci dice a quanti byte siamo dall'inizio, quantità che corrisponde alla lunghezza del file:
+
+{% highlight c %}
+len=ftell(f);
+{% endhighlight %}
+
+Per riposizionarci all'inizio del file (dobbiamo ancora rileggerlo), usiamo la funzione [`rewind`](http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#rewind).
+
+A questo punto, possiamo allocare la memoria che ci serve:
+{% highlight c %}
+    testo=malloc(sizeof(char)*(len+1));
+{% endhighlight %}
+
+(il `+1` serve per fare spazio al terminatore di stringa).
+
+Leggiamo il file e mettiamo il contenuto nella memoria allocata:
+
+{% highlight c %}
+fread(testo,sizeof(char),len,f);
+testo[len]='\0';
+{% endhighlight %}
+
+Apriamo il file di destinazione:
+
+{% highlight c %}
+dest=fopen("corretto.txt","w");
+{% endhighlight %}
+
+Ora immaginiamo di avere una funzione, `is_inizio_parola(char* text, char* parola)`, che restituisce `1` se la stringa a cui punta `text` comincia con la stringa a cui punta `parola`. Se avessimo questa funzione, il seguente ciclo salverebbe la stringa contenuta in `testo` sul file `dest`, sostituendo ogni occorrenza della stringa `sbagliata` con la stringa `corretta`:
+
+{% highlight c %}
+for (i=0;i<len;i++)
+{
+    if(is_inizio_parola(&testo[i],sbagliata)==0)
+        fwrite(&testo[i],sizeof(char),1,dest);
+    else
+    {
+        fwrite(corretta,sizeof(char),strlen(corretta),dest);
+        i+=strlen(sbagliata)-1;
+    }
+}
+{% endhighlight %}
+
+La funzione `is_inizio_parola` si può implementare così:
+
+{% highlight c %}
+int is_inizio_parola(char* testo, char* parola) // testo comincia con parola?
+{
+    int i;
+    int len=strlen(parola);
+
+    for (i=0;i<len && testo[i]!='\0';i++)
+    {
+        if(parola[i] != testo[i])
+            return 0;
+    }
+
+    if (i==len) return 1;
+
+    return 0;
+}
+{% endhighlight %}
+
+[Ecco](correggi2.c) il codice completo.
 <!--Il codice-->
 
 <!--`fwrite` funziona così: considera la memoria a partire dall'indirizzo indicato dal puntatore `data`-->
