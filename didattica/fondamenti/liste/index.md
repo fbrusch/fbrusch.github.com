@@ -105,9 +105,9 @@ text = enlarge(text, DIM, 2*DIM)
 
 Questa soluzione però presenta dei problemi, il più notevole dei quali è che, ad ogni 'enlargement', dobbiamo travasare tutti i dati dalla zona vecchia a quella nuova, e questa è un'operazione che può diventare molto costosa. Per minimizzare il numero di travasi potremmo allocare ogni volta molta memoria, ma allora al limite ricadremmo nel caso di array statici sovradimensionati. 
 
-Esiste una soluzione che ci consente di far crescere la memoria allocata in modo molto più continuo con le nostre esigenze. Vediamo di che si tratta...
-Rispetto al problema di sopra, immaginiamo di voler utilizzare una struttura che cresca ad ogni carattere che aggiungiamo...
+<!--Esiste una soluzione che ci consente di far crescere la memoria allocata in modo molto più continuo con le nostre esigenze. Vediamo di che si tratta...-->
+<!--Rispetto al problema di sopra, immaginiamo di voler utilizzare una struttura che cresca ad ogni carattere che aggiungiamo...-->
 
-(liste etc ogni carattere che aggiungiamo...
+<!--(liste etc ogni carattere che aggiungiamo...-->
 
-(liste, s etc, fino al
+<!--(liste, s etc, fino al-->
