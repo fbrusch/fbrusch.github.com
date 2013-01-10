@@ -10,4 +10,5 @@ author: Francesco Bruschi
 -   [gestione liste](funzioni_liste)
 -   [sudoku](sudoku)
 -   [file](file)
+-   [fork](fork)
 
