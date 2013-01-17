@@ -1,0 +1,17 @@
+for (i=0; i<LEN; i++)
+		{
+			for (j=0; j<LEN; j++)
+		{
+			for (h=0; h<LEN; h++)
+		{
+			for (k=0; k<LEN; k++)
+		{
+			// do something
+		}
+	
+		}
+	
+		}
+	
+		}
+	
