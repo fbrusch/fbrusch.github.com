@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define ORDINE 5
+#define ORDINE 2
 #define DIM (ORDINE*ORDINE)
 
 int no_doppioni(int a[DIM])
@@ -121,14 +121,14 @@ int main()
                      {0,8,0,0,0,0,2,0,5},
                      {0,4,0,0,0,6,0,0,9},
                      {0,5,0,0,0,2,0,4,0},
-                     {9,0,7,0,0,3,0,8,0}};
-    /*int m[DIM][DIM] = {{0,0,1,0},
+                     {9,0,7,0,0,3,0,8,0}};*/
+    int m[DIM][DIM] = {{0,0,1,0},
                        {0,0,0,0},
                        {0,0,0,0},
                        {0,0,3,0}};
-*/
-    int m[DIM][DIM];
-    vuota_sudoku(m);
+
+    /*int m[DIM][DIM];*/
+    /*vuota_sudoku(m);*/
     risolvi_sudoku(m);
     stampa_sudoku(m);
 }

@@ -11,4 +11,5 @@ author: Francesco Bruschi
 -   [sudoku](sudoku)
 -   [file](file)
 -   [fork](fork)
+-   [minimax](minimax)
 
