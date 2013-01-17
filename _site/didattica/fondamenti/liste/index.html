@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Strutture Dinamiche</title>
+    
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+    
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36402304-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Appunti Sparsi</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Strutture Dinamiche </h1>
+</div>
+
+<div class="row">
+  <div class="span12" style="width: 90%">
+    <p>Ora sappiamo come costruire array di dimensioni desiderate a runtime. Possiamo così scrivere programmi del tipo:</p>
+<div class='highlight'><pre><code class='c'><span class='kt'>int</span> <span class='o'>*</span><span class='n'>a</span><span class='p'>;</span>
+<span class='kt'>int</span> <span class='n'>n</span><span class='p'>,</span><span class='n'>i</span><span class='p'>;</span>
+
+<span class='n'>printf</span> <span class='p'>(</span><span class='s'>&quot;quanti numeri devo leggere?</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+<span class='n'>scanf</span> <span class='p'>(</span><span class='s'>&quot;%i&quot;</span><span class='p'>,</span><span class='o'>&amp;</span><span class='n'>n</span><span class='p'>);</span>
+<span class='n'>a</span> <span class='o'>=</span> <span class='n'>malloc</span><span class='p'>(</span><span class='k'>sizeof</span><span class='p'>(</span><span class='kt'>int</span><span class='p'>)</span><span class='o'>*</span><span class='n'>n</span><span class='p'>);</span>
+<span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='n'>n</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+    <span class='n'>scanf</span><span class='p'>(</span><span class='s'>&quot;%i&quot;</span><span class='n'>a</span><span class='o'>+</span><span class='n'>i</span><span class='p'>);</span>
+
+<span class='cm'>/* fai qualcosa con gli elementi di a */</span>
+</code></pre>
+</div>
+<p>Però gli array dinamici non sono ancora la struttura dinamica più flessibile che possiamo immaginare. Per esempio, linguaggi come Python offrono strutture che consentono di fare cose notevoli come queste:</p>
+<div class='highlight'><pre><code class='python'><span class='o'>&gt;&gt;&gt;</span> <span class='n'>a</span> <span class='o'>=</span> <span class='p'>[</span><span class='mi'>1</span><span class='p'>,</span><span class='mi'>2</span><span class='p'>,</span><span class='mi'>3</span><span class='p'>]</span>
+<span class='o'>&gt;&gt;&gt;</span> <span class='k'>print</span> <span class='n'>a</span>
+<span class='p'>[</span><span class='mi'>1</span><span class='p'>,</span> <span class='mi'>2</span><span class='p'>,</span> <span class='mi'>3</span><span class='p'>]</span>
+<span class='o'>&gt;&gt;&gt;</span> <span class='n'>a</span><span class='o'>.</span><span class='n'>append</span><span class='p'>(</span><span class='mi'>4</span><span class='p'>)</span>
+<span class='o'>&gt;&gt;&gt;</span> <span class='k'>print</span> <span class='n'>a</span>
+<span class='p'>[</span><span class='mi'>1</span><span class='p'>,</span> <span class='mi'>2</span><span class='p'>,</span> <span class='mi'>3</span><span class='p'>,</span> <span class='mi'>4</span><span class='p'>]</span>
+</code></pre>
+</div>
+<p>In questo esempio, <code>a</code> è un array dinamico, che viene inizializzato con un certo insieme di valori, e che può poi crescere a piacimento. I vantaggi della disponibilità di una struttura dati di questo tipo sono evidenti: non è necessario prevedere, al momento dell&#8217;allocazione, la quantità di memoria che servirà per contenere i dati, perché questa si può adattare all&#8217;occorrenza.</p>
+
+<p>Prima di vedere se riusciamo ad ottenere la flessibilità degli array di Python in C, consideriamo un altro approccio alla dinamicità delle strutture dati nel nostro amato linguaggio. Quello che potremmo fare è una cosa del genere: immaginiamo di voler memorizzare un testo scritto dall&#8217;utente in un array. Non sappiamo quanto sarà lungo il testo. Immaginiamo questa situazione: vogliamo chiedere in input all&#8217;utente una sequenza di caratteri che rappresenti una frase in lingua italiana. La frase è una sequenza di caratteri, terminata da un carattere <em>punto</em> <code>&#39;.&#39;</code>.</p>
+
+<p>Cominciamo con il dichiarare una lunghezza iniziale:</p>
+<div class='highlight'><pre><code class='c'><span class='cp'>#define DIM 16</span>
+
+<span class='p'>[...]</span>
+
+<span class='kt'>int</span> <span class='o'>*</span><span class='n'>text</span><span class='p'>;</span>
+<span class='kt'>int</span> <span class='n'>i</span><span class='p'>;</span>
+<span class='kt'>char</span> <span class='n'>c</span><span class='o'>:</span>
+<span class='p'>[...]</span>
+
+<span class='n'>text</span> <span class='o'>=</span> <span class='n'>malloc</span><span class='p'>(</span><span class='k'>sizeof</span><span class='p'>(</span><span class='kt'>char</span><span class='p'>)</span><span class='o'>*</span><span class='n'>DIM</span><span class='p'>);</span>
+<span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span>
+<span class='k'>do</span> 
+<span class='p'>{</span>
+    <span class='n'>scanf</span> <span class='p'>(</span><span class='s'>&quot;%c&quot;</span><span class='p'>,</span><span class='o'>&amp;</span><span class='n'>c</span><span class='p'>);</span>
+    <span class='n'>text</span><span class='p'>[</span><span class='n'>i</span><span class='o'>++</span><span class='p'>]</span><span class='o'>=</span><span class='n'>c</span><span class='p'>;</span>
+<span class='p'>}</span> <span class='k'>while</span> <span class='p'>(</span><span class='n'>c</span><span class='o'>!=</span><span class='sc'>&#39;.&#39;</span> <span class='o'>&amp;&amp;</span> <span class='n'>i</span><span class='o'>&lt;</span><span class='n'>DIM</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>Il codice sopra dimensiona un array <code>a</code> in grado di memorizzare <code>DIM</code> caratteri e poi, nel ciclo <code>for</code>, chiede in input <code>DIM</code> caratteri. Cosa succede se, alla fine del ciclo l&#8217;utente non ha ancora immesso il fatidico carattere finale <code>&#39;.&#39;</code>? Lo spazio inizialmente allocato è finito, cosa si può fare? Una soluzione potrebbe essere: allochiamo una porzione di memoria più grande, copiamo i dati inseriti fin qui nella nuova zona di memoria, e ricominciamo a memorizzare i caratteri dal valore di dell&#8217;indice <code>i</code> al quale ci eravamo fermati:</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>tmp</span> <span class='o'>=</span> <span class='n'>malloc</span><span class='p'>(</span><span class='n'>sizeof</span><span class='p'>(</span><span class='n'>int</span><span class='p'>)</span><span class='o'>*</span><span class='p'>(</span><span class='no'>DIM</span><span class='o'>*</span><span class='mi'>2</span><span class='p'>));</span> <span class='sr'>/* alloco */</span>
+
+<span class='k'>for</span> <span class='p'>(</span><span class='n'>j</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>j</span><span class='o'>&lt;</span><span class='no'>DIM</span><span class='p'>;</span><span class='n'>j</span><span class='o'>++</span><span class='p'>)</span>                <span class='sr'>/* copio i dati */</span>
+    <span class='n'>tmp</span><span class='o'>[</span><span class='n'>j</span><span class='o'>]=</span><span class='n'>text</span><span class='o'>[</span><span class='n'>j</span><span class='o'>]</span><span class='p'>;</span>     
+
+<span class='n'>free</span><span class='p'>(</span><span class='n'>text</span><span class='p'>);</span>                        <span class='sr'>/* libero la zona di memoria vecchia */</span>
+<span class='n'>text</span> <span class='o'>=</span> <span class='n'>tmp</span><span class='p'>;</span>                        <span class='sr'>/* cambio il valore di text: d&#39;ora in poi si riferira&#39;</span>
+<span class='sr'>                                      alla nuova zona di memoria */</span>
+</code></pre>
+</div>
+<p>Potremmo concentrare le operazioni di reallocazione in una funzione di questo tipo:</p>
+<div class='highlight'><pre><code class='c'><span class='cp'>#include &lt;stdio.h&gt;</span>
+
+<span class='kt'>int</span> <span class='o'>*</span><span class='nf'>enlarge</span><span class='p'>(</span><span class='kt'>int</span> <span class='o'>*</span><span class='n'>a</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>old_size</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>new_size</span><span class='p'>)</span>
+<span class='p'>{</span>
+    <span class='kt'>int</span> <span class='o'>*</span><span class='n'>b</span><span class='o'>=</span><span class='n'>malloc</span><span class='p'>(</span><span class='k'>sizeof</span><span class='p'>(</span><span class='kt'>int</span><span class='p'>)</span><span class='o'>*</span><span class='n'>old_size</span><span class='p'>);</span>
+    <span class='kt'>int</span> <span class='n'>i</span><span class='p'>;</span>
+    <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='n'>old_size</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+        <span class='n'>b</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span><span class='o'>=</span><span class='n'>a</span><span class='p'>[</span><span class='n'>i</span><span class='p'>];</span>
+    <span class='n'>free</span> <span class='p'>(</span><span class='n'>a</span><span class='p'>);</span>
+    <span class='k'>return</span> <span class='n'>b</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>La funzione si userebbe in questo modo: quando vogliamo spostare i dati presenti in memoria a partire dall&#8217;indirizzo a cui punta <code>text</code> in una zona più grande, possiamo fare così:</p>
+<div class='highlight'><pre><code class='c'><span class='n'>text</span> <span class='o'>=</span> <span class='n'>enlarge</span><span class='p'>(</span><span class='n'>text</span><span class='p'>,</span> <span class='n'>DIM</span><span class='p'>,</span> <span class='mi'>2</span><span class='o'>*</span><span class='n'>DIM</span><span class='p'>)</span>
+</code></pre>
+</div>
+<p>Questa soluzione però presenta dei problemi, il più notevole dei quali è che, ad ogni &#8216;enlargement&#8217;, dobbiamo travasare tutti i dati dalla zona vecchia a quella nuova, e questa è un&#8217;operazione che può diventare molto costosa. Per minimizzare il numero di travasi potremmo allocare ogni volta molta memoria, ma allora al limite ricadremmo nel caso di array statici sovradimensionati.</p>
+<!--Esiste una soluzione che ci consente di far crescere la memoria allocata in modo molto più continuo con le nostre esigenze. Vediamo di che si tratta...--><!--Rispetto al problema di sopra, immaginiamo di voler utilizzare una struttura che cresca ad ogni carattere che aggiungiamo...--><!--(liste etc ogni carattere che aggiungiamo...--><!--(liste, s etc, fino al-->
+
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy;  2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
+

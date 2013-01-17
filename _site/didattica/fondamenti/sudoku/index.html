@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Sudoku, risolutori, e universi paralleli</title>
+    
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+    
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36402304-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Appunti Sparsi</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Sudoku, risolutori, e universi paralleli </h1>
+</div>
+
+<div class="row">
+  <div class="span12" style="width: 90%">
+    <p>Ok, vogliamo risolvere il <a href='http://it.wikipedia.org/wiki/Sudoku'>sudoku</a>, quello che troviamo nella pagina dell&#8217;enigmistica del giornale. Anzi, vogliamo farlo risolvere al calcolatore. Quindi, come abbiamo intuito, dovremo scrivere un programma che lo risolva. E, prima, ci converrà bene trovare un algoritmo. Osservazione: il sudoku che troviamo normalmente sulle pagine di un giornale è composto da uno schema 9 per 9. Ora, ci chiediamo: cosa c&#8217;è di speciale nel numero 9? Potremmo definire schemi di sudoku 8 per 8? Un attimo di riflessione ci convince del fatto che potremmo variare la dimensione dello schema, a patto di utilizzare, per la dimensione del lato, un <em>quadrato perfetto</em>. In questo modo, è possibile formare i sottoquadrati. Quindi sono possibili sudoku di tante dimensioni, una per ciascun quadrato perfetto. Ed ecco la prima osservazione: nel ragionare sulla ricerca di una soluzione automatica, ci conviene considerare il caso dimensionalmente più gestibile, e cercare una soluzione parametrica rispetto alle dimensioni. In questo modo:</p>
+
+<ol>
+<li>possiamo fare leva più facilmente sull&#8217;intuito</li>
+
+<li>otteniamo una soluzione che è più generale, che vale per tutte le famiglie di sudoku, e che ci permetterà di stupire i nostri amici con improponibili schemi 25 per 25&#8230;</li>
+</ol>
+
+<p>Ok, consideriamo quindi uno schema 4 per 4:</p>
+
+<pre><code>+---+---++---+---+
+|   | 4 ||   | 2 |
++---+---++---+---+
+| 2 |   || 1 |   |
++===+===++===+===+
+|   | 2 ||   | 1 |
++---+---++---+---+
+| 4 | 1 ||   | 3 |
++---+---++---+---+</code></pre>
+
+<p>Utilizziamo questa convenzione: ci riferiamo alle caselle vuote con: <code>v0, v1...</code> dove <code>v0</code> è la prima casella vuota etc:</p>
+
+<pre><code>+---+---++---+---+
+| v0| 4 ||   | 2 |
++---+---++---+---+
+| 2 | v1|| 1 |etc|
++---+---++---+---|
++---+---++---+---+
+|   | 2 ||   | 1 |
++---+---++---+---+
+| 4 | 1 ||   | 3 |
++---+---++---+---+</code></pre>
+
+<p>Il nostro scopo è completare lo schema, cioè riempire tutte le caselle vuote rispettando le regole del gioco. Ora, la domanda è: qual è il valore che dobbiamo mettere in <code>v0</code>? Attenzione: non lasciamoci ingannare dal fatto che, in questo caso semplice, il numero lo vediamo &#8216;a occhio&#8217;. Dobbiamo riuscire a descrivere una procedura facilmente traducibile in linguaggio C. Ebbene, partiamo con un approccio estremo, che ci richieda il minimo sforzo intellettivo, a un certo livello: vogliamo provare a mettere in <code>v0</code> qualsiasi cifra ammissibile, cioè una tra <code>{1,2,3,4}</code>. Immaginiamo di poter fare contemporaneamente tutte e quattro le scelte, e di creare quattro diversi universi paralleli: uno in cui abbiamo scelto <code>1</code>, uno in cui abbiamo scelto <code>2</code>, etc:</p>
+
+<pre><code>+ universo originario
+|
++----v0=1
+|
++----v0=2
+|
++----v0=3
+|
++----v0=4</code></pre>
+
+<p>Ok. Ora immaginiamo che ciascuna dei nostri <em>io paralleli</em> controlli se lo schema di sudoku che si trova sotto gli occhi è valido oppure no. La regola è: chi si trova in mano uno schema <em>non valido</em>, cioè uno schema che non rispetta le regole del sudoku, <em>rinuncia</em>, e si autodissolve nello spirito cosmico. Dopo questo drammatico passo di selezione, la situazione degli universi paralleli sarà:</p>
+
+<pre><code>+ universo originario
+|
++----v0=1
+|
++----v0=3</code></pre>
+
+<p>In questi due universi, il problema è quale prossima mossa fare, cioè cosa mettere in <code>v2</code>. Ancora una volta, non facciamo ragionamenti troppo sofisticati, e proviamo con tutte le cifre:</p>
+
+<pre><code>+ universo originario
+|
+|(v0=1)
++----+
+|    |
+|    +---(v0=1, v1=1)
+|    |
+|    +---(v0=1, v1=2)
+|    |
+|    +---(v0=1, v1=3)
+|    |
+|    +---(v0=1, v1=4)
+|
+|(v0=3)    
++----+
+     |
+     +---(v0=3, v1=1)
+     |
+     +---(v0=3, v1=2)
+     |
+     +---(v0=3, v1=3)
+     |
+     +---(v0=3, v1=4)</code></pre>
+
+<p>Procedendo per selezioni e biforcazioni, prima o poi arriveremo ad un universo in cui tutte le caselle vuote sono state riempite. Se la soluzione è unica, rimarrà un clone di noi in un solo universo, e quello sarà il &#8216;noi&#8217; che ha trovato la soluzione.</p>
+
+<p>Ora, come facciamo ad implementare tutto questo in C? Vedremo più avanti uno strumento (la programmazione multiprocesso) che implementa una semantica di esecuzione molto simile a quella dei nostri universi biforcanti. Per ora siamo soli. Come possiamo fare? Potremmo utilizzare un ragionamento ricorsivo di questo tipo:</p>
+
+<ol>
+<li>sono in grado di risolvere un sudoku in cui <em>tutte</em> le caselle sono state assegnate? Beh, sì: controllo se tutte le regole sono state rispettate: se sì, il sudoku è già risolto, se no, non è risolvibile!</li>
+
+<li>se devo risolvere un sudoku con <code>n</code> caselle vuote: prendo la prima casella vuota, ci metto il primo numero possibile, e provo a risolvere lo schema con <code>n-1</code> caselle vuote risultante. Se non ci riesco, provo con la cifra successiva. Se non ci riesco con nessuna cifra, il sudoku non è risolubile!</li>
+</ol>
+
+<p>Il ragionamento delineato dai punti 1. e 2. è correttamente ricorsivo: c&#8217;è un caso base che so risolvere, e c&#8217;è un passo di riduzione che mi avvicina al caso base.</p>
+
+<p>Una possibile implementazione, in C, potrebbe essere:</p>
+<div class='highlight'><pre><code class='c'><span class='kt'>int</span> <span class='nf'>risolvi_sudoku</span><span class='p'>(</span><span class='kt'>int</span> <span class='n'>s</span><span class='p'>[</span><span class='n'>DIM</span><span class='p'>][</span><span class='n'>DIM</span><span class='p'>])</span>
+<span class='p'>{</span>
+    <span class='kt'>int</span> <span class='n'>x</span><span class='p'>,</span><span class='n'>y</span><span class='p'>;</span>
+    <span class='kt'>int</span> <span class='n'>i</span><span class='p'>,</span><span class='n'>j</span><span class='p'>;</span>
+    <span class='kt'>int</span> <span class='n'>trovato_vuoto</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span>
+
+    <span class='cm'>/* cerca la prima casella vuota </span>
+<span class='cm'>    /* alla fine del ciclo, se c&#39;e&#39; una casella vuota</span>
+<span class='cm'>       trovato_vuoto varra&#39; 1, e le coordinate della casella</span>
+<span class='cm'>       saranno in x e in y */</span>
+
+    <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='n'>DIM</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+        <span class='k'>for</span> <span class='p'>(</span><span class='n'>j</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>j</span><span class='o'>&lt;</span><span class='n'>DIM</span><span class='p'>;</span><span class='n'>j</span><span class='o'>++</span><span class='p'>)</span>
+            <span class='k'>if</span> <span class='p'>(</span><span class='n'>s</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span><span class='o'>==</span><span class='mi'>0</span><span class='p'>)</span>
+                <span class='k'>if</span> <span class='p'>(</span><span class='n'>trovato_vuoto</span><span class='o'>==</span><span class='mi'>0</span><span class='p'>)</span>
+                <span class='p'>{</span>
+                    <span class='n'>trovato_vuoto</span><span class='o'>=</span><span class='mi'>1</span><span class='p'>;</span>
+                    <span class='n'>x</span><span class='o'>=</span><span class='n'>i</span><span class='p'>;</span>
+                    <span class='n'>y</span><span class='o'>=</span><span class='n'>j</span><span class='p'>;</span>
+                <span class='p'>}</span>
+
+    <span class='k'>if</span> <span class='p'>(</span><span class='n'>trovato_vuoto</span><span class='o'>==</span><span class='mi'>0</span><span class='p'>)</span> <span class='c1'>// se lo schema e&#39; completo</span>
+    <span class='p'>{</span>
+        <span class='k'>if</span> <span class='p'>(</span><span class='n'>corretto</span><span class='p'>(</span><span class='n'>s</span><span class='p'>)</span> <span class='k'>return</span> <span class='mi'>1</span><span class='p'>);</span> <span class='c1'>// se e&#39; corretto hai risolto</span>
+        <span class='k'>else</span> <span class='k'>return</span> <span class='mi'>0</span><span class='p'>;</span>             <span class='c1'>// altrimenti e&#39; impossibile</span>
+    <span class='p'>}</span>
+
+    <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>1</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;=</span><span class='n'>DIM</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+    <span class='p'>{</span>
+        <span class='n'>s</span><span class='p'>[</span><span class='n'>x</span><span class='p'>][</span><span class='n'>y</span><span class='p'>]</span><span class='o'>=</span><span class='n'>i</span><span class='p'>;</span>
+        <span class='k'>if</span> <span class='p'>(</span><span class='n'>risolvi_sudoku</span><span class='p'>(</span><span class='n'>s</span><span class='p'>)</span><span class='o'>!=</span><span class='mi'>0</span><span class='p'>)</span> <span class='k'>return</span> <span class='mi'>1</span><span class='p'>;</span>
+    <span class='p'>}</span>
+    <span class='n'>s</span><span class='p'>[</span><span class='n'>x</span><span class='p'>][</span><span class='n'>y</span><span class='p'>]</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span>
+    <span class='k'>return</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>Nel codice sopra abbiamo immaginato di avere a disposizione una funzione, <code>corretto</code>, che controlla se una matrice passata è uno schema di sudoku corretto. Il problema di questa soluzione è che controlliamo se uno schema è corretto solamente quando siamo arrivati in un universo &#8216;terminale&#8217;, cioè uno in cui tutte le caselle sono state riempite. In realtà noi potremmo scartare interi &#8216;sottoalberi&#8217; di scelta: da uno schema incompleto in cui è violata una regola (c&#8217;è una ripetizione in una riga, in una colonna, o in un quadrante) non potrà mai venire fuori una soluzione corretta solo riempiendo altre caselle. Possiamo fare qualcosa di molto più furbo così:</p>
+<div class='highlight'><pre><code class='c'><span class='kt'>int</span> <span class='nf'>risolvi_sudoku</span><span class='p'>(</span><span class='kt'>int</span> <span class='n'>s</span><span class='p'>[</span><span class='n'>DIM</span><span class='p'>][</span><span class='n'>DIM</span><span class='p'>])</span>
+<span class='p'>{</span>
+    <span class='kt'>int</span> <span class='n'>x</span><span class='p'>,</span><span class='n'>y</span><span class='p'>;</span>
+    <span class='kt'>int</span> <span class='n'>i</span><span class='p'>,</span><span class='n'>j</span><span class='p'>;</span>
+    <span class='kt'>int</span> <span class='n'>trovato_vuoto</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span>
+
+    <span class='k'>if</span> <span class='p'>(</span><span class='n'>corretto</span><span class='p'>(</span><span class='n'>s</span><span class='p'>)</span><span class='o'>==</span><span class='mi'>0</span><span class='p'>)</span> <span class='k'>return</span> <span class='mi'>0</span><span class='p'>;</span>
+
+    <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='n'>DIM</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+        <span class='k'>for</span> <span class='p'>(</span><span class='n'>j</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>j</span><span class='o'>&lt;</span><span class='n'>DIM</span><span class='p'>;</span><span class='n'>j</span><span class='o'>++</span><span class='p'>)</span>
+            <span class='k'>if</span> <span class='p'>(</span><span class='n'>s</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span><span class='o'>==</span><span class='mi'>0</span><span class='p'>)</span>
+                <span class='k'>if</span> <span class='p'>(</span><span class='n'>trovato_vuoto</span><span class='o'>==</span><span class='mi'>0</span><span class='p'>)</span>
+                <span class='p'>{</span>
+                    <span class='n'>trovato_vuoto</span><span class='o'>=</span><span class='mi'>1</span><span class='p'>;</span>
+                    <span class='n'>x</span><span class='o'>=</span><span class='n'>i</span><span class='p'>;</span>
+                    <span class='n'>y</span><span class='o'>=</span><span class='n'>j</span><span class='p'>;</span>
+                <span class='p'>}</span>
+
+    <span class='k'>if</span> <span class='p'>(</span><span class='n'>trovato_vuoto</span><span class='o'>==</span><span class='mi'>0</span><span class='p'>)</span> <span class='k'>return</span> <span class='mi'>1</span><span class='p'>;</span>
+
+    <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>1</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;=</span><span class='n'>DIM</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+    <span class='p'>{</span>
+        <span class='n'>s</span><span class='p'>[</span><span class='n'>x</span><span class='p'>][</span><span class='n'>y</span><span class='p'>]</span><span class='o'>=</span><span class='n'>i</span><span class='p'>;</span>
+        <span class='k'>if</span> <span class='p'>(</span><span class='n'>risolvi_sudoku</span><span class='p'>(</span><span class='n'>s</span><span class='p'>)</span><span class='o'>!=</span><span class='mi'>0</span><span class='p'>)</span> <span class='k'>return</span> <span class='mi'>1</span><span class='p'>;</span>
+    <span class='p'>}</span>
+    <span class='n'>s</span><span class='p'>[</span><span class='n'>x</span><span class='p'>][</span><span class='n'>y</span><span class='p'>]</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span>
+    <span class='k'>return</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>Ora ci rimane solo da scrivere la funzione <code>corretto</code>, che è concettualmente banale.</p>
+
+<p>La trovate, insieme a tutto il resto, <a href='sudoku_in_classe.c'>qui</a>.</p>
+
+    
+      
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    
+    var disqus_shortname = 'appunti-sparsi'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy;  2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
+

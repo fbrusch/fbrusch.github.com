@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Uno, Nessuno, Centomila</title>
+    
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+    
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36402304-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Appunti Sparsi</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Uno, Nessuno, Centomila </h1>
+</div>
+
+<div class="row">
+  <div class="span12" style="width: 90%">
+    <p>Consideriamo questo problema: prendiamo tutte le possibili sequenze di quattro numeri appartenenti all&#8217;insieme <code>{0,1,2,3}</code>. Esempi di queste seguenze: <code>0,1,2,0</code>,<code>1,1,1,2</code>,<code>2,0,2,0</code>. Vogliamo stampare tutte le sequenze di questo tipo, per le quali la somma sia 4. Una soluzione potrebbe consistere in un annidamento profondo di cicli:</p>
+<div class='highlight'><pre><code class='c'><span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='mi'>4</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+    <span class='k'>for</span> <span class='p'>(</span><span class='n'>j</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>j</span><span class='o'>&lt;</span><span class='mi'>4</span><span class='p'>;</span><span class='n'>j</span><span class='o'>++</span><span class='p'>)</span>
+        <span class='k'>for</span> <span class='p'>(</span><span class='n'>h</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>h</span><span class='o'>&lt;</span><span class='mi'>4</span><span class='p'>;</span><span class='n'>h</span><span class='o'>++</span><span class='p'>)</span>
+            <span class='k'>for</span> <span class='p'>(</span><span class='n'>k</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>k</span><span class='o'>&lt;</span><span class='mi'>4</span><span class='p'>;</span><span class='n'>k</span><span class='o'>++</span><span class='p'>)</span>
+                <span class='k'>if</span> <span class='p'>(</span><span class='n'>h</span><span class='o'>+</span><span class='n'>k</span><span class='o'>+</span><span class='n'>i</span><span class='o'>+</span><span class='n'>j</span><span class='o'>==</span><span class='mi'>5</span><span class='p'>)</span>
+                    <span class='n'>printf</span> <span class='p'>(</span><span class='s'>&quot;%i,%i,%i,%i</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span><span class='n'>i</span><span class='p'>,</span><span class='n'>j</span><span class='p'>,</span><span class='n'>k</span><span class='p'>,</span><span class='n'>h</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>La soluzione proposta, però ha un po&#8217; di problemi, il più notevole dei quali è che <em>non scala</em>: se vogliamo allungare la sequenza, dobbiamo aggiungere &#8220;a mano&#8221; nel codice un altro ciclo. Cogliamo l&#8217;occasione per fare la conoscenza con uno paradigma di programmazione molto potente: la <a href='http://en.wikipedia.org/wiki/Nondeterministic_programming'>programmazione non deterministica</a>. La cosa funziona più o meno così: ogni volta che, in un programma, dobbiamo valutare più opzioni, <em>le valutiamo tutte</em>! In che modo? Proviamo a rappresentare il nostro problema in maniera diversa. Rappresentiamo la nostra sequenza con un array, in questo caso particolare di dimensione 4 (ma immaginiamo che la dimensione possa variare). Proviamo a descrivere una possibile soluzione con questa metafora: per considerare <em>tutte</em> le possibili sequenze di lunghezza 4 dei numeri <code>{0,1,2}</code>, consideriamo in sequenza ogni posizione dell&#8217;array <code>{0,1,2,3}</code>. Cominciamo dalla prima posizione, quella con indice <code>0</code>. Quante diverse opzioni abbiamo per mettere una cifra in questa posizione? Quattro. Bene, scegliamole tutte! In che modo: immaginiamo di <em>quadruplicare</em> il nostro programma in esecuzione in quattro processi, in tutto e per tutto uguali, tranne che per il fatto che ognuno ha scelto una prima cifra diversa. A questo punto abbiamo quattro processi in esecuzione <code>P0,P1,P2,P3</code>. Ciascuno di questi processi ora deve scegliere una seconda cifra: ebbene, ciascuno si quadruplicherà e sceglierà di nuovo tutte le cifre. Alla fine di questa seconda ondata di clonazioni avremo sedici processi, che chiamiamo arbitrariamente: <code>P00,P01,P10,...,P33</code>. Man mano che dobbiamo fare scelte, il numero di universi paralleli aumenta. Alla fine, quando tutti hanno fatto tutte le scelte, succede questo: ogni processo guarda il proprio array, ne somma gli elementi, e vede se il risultato è 4. In questo caso, il processo stampa il contenuto dell&#8217;array, altrimenti no. Come si può implementare questo bizzarro comportamento, in C? Esistono molti modi diversi. (Entra <code>fork</code>.)</p>
+
+<h2 id='doppelgnger'>Doppelgänger</h2>
+
+<p>I sistemi operativi Unix offrono una primitiva, la <code>fork</code>, che può essere invocata anche in un programma C, che consente di creare una copia (quasi) esatta del processo in esecuzione. Vediamo subito un esempio:</p>
+<div class='highlight'><pre><code class='c'><span class='cp'>#include &lt;stdio.h&gt;</span>
+<span class='cp'>#include &lt;unistd.h&gt;</span>
+
+<span class='kt'>int</span> <span class='nf'>main</span><span class='p'>()</span>
+<span class='p'>{</span>
+    <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;prima di fork()</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+    <span class='n'>fork</span><span class='p'>();</span>
+    <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;dopo fork()</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>L&#8217;esecuzione di questo codice produce questo output:</p>
+
+<pre><code>prima di fork()
+dopo fork()
+dopo fork()</code></pre>
+
+<p>Cosa fa, <a href='http://www.science.unitn.it/~fiorella/guidac/guidac096.html'><code>fork</code></a>? <em>Sdoppia</em> il processo in esecuzione, creando un processo quasi identico, chiamato processo <em>figlio</em>. Come fa, ciascuna delle due copie, a capire se è il padre oppure il figlio? La fork crea due processi identici (stesso codice, stesso valore del program counter, stesso valore di tutte le variabili e del contenuto della memoria) tranne che per un piccolo particolare: il valore di ritorno! Il figlio vede la fork ritornare il valore <code>0</code>, mentre il padre vede un valore diverso da <code>0</code> (in particolare, il padre si vede ritornare il <em>process id</em> del figlio, cioè un valore che identifica univocamente il processo figlio). Giocando sul valore di ritorno della <code>fork</code> possiamo differenziare il comportamento di padre e figlio:</p>
+<div class='highlight'><pre><code class='c'><span class='n'>pid</span> <span class='o'>=</span> <span class='n'>fork</span><span class='p'>();</span>
+<span class='k'>if</span> <span class='p'>(</span><span class='n'>pid</span><span class='o'>==</span><span class='mi'>0</span><span class='p'>)</span>
+    <span class='n'>printf</span> <span class='p'>(</span><span class='s'>&quot;figlio</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+<span class='k'>else</span>
+    <span class='n'>printf</span> <span class='p'>(</span><span class='s'>&quot;padre</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>Output:</p>
+
+<pre><code>padre
+figlio</code></pre>
+
+<p>Ecco come utilizzare la fork per implementare il comportamento non deterministico descritto sopra:</p>
+<div class='highlight'><pre><code class='c'><span class='cp'>#include &lt;stdio.h&gt;</span>
+<span class='cp'>#include &lt;unistd.h&gt;</span>
+<span class='cp'>#define LEN 4</span>
+
+<span class='kt'>int</span> <span class='nf'>main</span><span class='p'>()</span>
+<span class='p'>{</span>
+    <span class='kt'>int</span> <span class='n'>pid</span><span class='p'>;</span>
+    <span class='kt'>int</span> <span class='n'>a</span><span class='p'>[</span><span class='n'>LEN</span><span class='p'>];</span>
+    <span class='kt'>int</span> <span class='n'>i</span><span class='p'>;</span>
+    <span class='kt'>int</span> <span class='n'>somma</span><span class='p'>;</span>
+
+    <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='n'>LEN</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+        <span class='k'>if</span> <span class='p'>(</span><span class='n'>fork</span><span class='p'>())</span>
+            <span class='n'>a</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span>
+        <span class='k'>else</span>
+            <span class='k'>if</span> <span class='p'>(</span><span class='n'>fork</span><span class='p'>())</span>
+                <span class='n'>a</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span><span class='o'>=</span><span class='mi'>1</span><span class='p'>;</span>
+            <span class='k'>else</span>
+                <span class='n'>a</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span><span class='o'>=</span><span class='mi'>2</span><span class='p'>;</span>
+
+    <span class='n'>somma</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span>
+    <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='n'>LEN</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+        <span class='n'>somma</span><span class='o'>+=</span><span class='n'>a</span><span class='p'>[</span><span class='n'>i</span><span class='p'>];</span>
+
+    <span class='k'>if</span> <span class='p'>(</span><span class='n'>somma</span><span class='o'>==</span><span class='mi'>4</span><span class='p'>)</span>
+    <span class='p'>{</span>
+        <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='n'>LEN</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+            <span class='n'>printf</span> <span class='p'>(</span><span class='s'>&quot;%i,&quot;</span><span class='p'>,</span><span class='n'>a</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]);</span>
+        <span class='n'>printf</span> <span class='p'>(</span><span class='s'>&quot;</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+    <span class='p'>}</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>Ed ecco l&#8217;output:</p>
+
+<pre><code>1,1,2,0,
+2,0,0,2,
+1,1,1,1,
+0,2,0,2,
+1,1,0,2,
+2,2,0,0,
+1,2,0,1,
+0,0,2,2,
+1,0,1,2,
+0,2,2,0,
+1,2,1,0,
+2,1,1,0,
+0,1,1,2,
+2,0,1,1,
+2,0,2,0,
+1,0,2,1,
+2,1,0,1,
+0,2,1,1,
+0,1,2,1,</code></pre>
+
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy;  2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
+

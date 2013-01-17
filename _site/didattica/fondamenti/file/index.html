@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Verba volant, Scripta manent</title>
+    
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+    
+
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36402304-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+  </head>
+
+  <body>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">Appunti Sparsi</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Verba volant, Scripta manent </h1>
+</div>
+
+<div class="row">
+  <div class="span12" style="width: 90%">
+    <p>Ok: abbiamo raccolto tutti i dati che vogliamo elaborare dal nostro utente, oppure lo schema del sudoku, oppure qualsiasi altra cosa. Tra poco è ora di spegnere il computer,e tutti i <a href='http://www.youtube.com/watch?v=Y3WamQPEQbM'>dati si perderanno</a>. La memoria di cui abbiamo tanto parlato, quella che usiamo per memorizzare il contenuto delle variabili, difatti, è <em>volatile</em>: ritiene l&#8217;informazione fino a quando è alimentata elettronicamente. Non appena l&#8217;alimentazione viene tolta, i condensatori che con la loro tensione rappresentano gli <code>0</code> e gli <code>1</code> che utilizziamo per codificare l&#8217;informazione si svuotano tutti, e la festa finisce. Non c&#8217;è niente che possiamo fare, se vogliamo scongiurare questo oblio? Se vogliamo lasciare una traccia di quello che è successo, se vogliamo poter continuare alla prossima accensione qualcosa che abbiamo lasciato a metà, insomma: se vogliamo <em>salvare</em> i nostri dati? Ebbene sì: quello che possiamo possiamo fare e&#8217; di scrivere i nostri dati su un supporto <em>non volatile</em>, cioè un supporto in cui l&#8217;informazione non vada persa allo spegnimento. Supporti di questo tipo sono:dischi fissi, chiavette usb, cd-rom etc. E&#8217; anche possibile che, nel futuro, la memoria RAM, quella che usiamo per memorizzare le variabili utilizzate dai programmi in esecuzione, verrà realizzata con tecnologie non volatili, e quindi potremo vedere programmi che continuano a girare tra accensioni e spegnimenti senza fare una piega, ma il problema di scegliere quali dati perdere con la terminazione diun programma e quali tenere potrebbe restare (se la tecnologia ci consentirà di avere quantità ingenti di memoria a bassissimo costo lo scenario potrebbe essere ancora diverso&#8230;) Ma viviamo nel presente: oggi la RAM è perlopiù volatile, e se vogliamo rendere qualche dato permanente, dobbiamo farlo esplicitamente. L&#8217;interfaccia che abbiamo a disposizione per rendere i dati permanenti è costruita attorno al concetto di <em>file</em>. Cos&#8217;è un <em>file</em>? E&#8217; molto semplice: un file è una <em>sequenza di byte</em> con un nome. Ad esempio, il file sul quale è registrato questo documento comincia così:</p>
+
+<pre><code>2d 2d 2d 0a 74 69 74 6c 65 3a 20 56 65 ...</code></pre>
+
+<p>(Ogni coppia di caratteri rappresenta un byte in formato esadecimale).</p>
+
+<p>Che cosa possiamo fare, con un file? Possiamo:</p>
+
+<ol>
+<li>crearlo</li>
+
+<li>aggiungere una sequenza di byte in fondo</li>
+
+<li>aprirne uno esistente</li>
+
+<li>leggere una sequenza di byte</li>
+
+<li>sovrascrivere un byte in una certa posizione</li>
+</ol>
+
+<p>Sembra poco, ma è abbastanza per fare molte cose. In particolare, è abbastanza per <em>salvare e caricare</em> porzioni della memoria, cosa che ci consente di salvare e ricaricare dati presenti nelle variabili.</p>
+
+<p>Cominciamo con il problema più semplice che ci può venire in mente: scrivere un programma che chieda un numero all&#8217;utente, e che lo memorizzi su un file, in modo che possa essere caricato in seguito, da un altro programma, e stampato.</p>
+
+<h3 id='creare_un_file'>Creare un file</h3>
+
+<p>Come si fa a creare un nuovo file? La libreria C standard ci offre la funzione <a href='http://it.wikibooks.org/wiki/C/Appendice/Librerie_standard/stdio.h#fopen.28.29'><code>fopen</code></a>. <code>fopen</code> riceve in ingresso due parametri: una stringa, che rappresenta il nome del file da aprire, e un&#8217;altra stringa, che rappresenta la <em>modalità</em>, cioè l&#8217;informazione di quello che vogliamo fare con il file (se scriverci sopra, leggere, etc..). <code>fopen</code> restituisce un valore che chiamiamo <em>descrittore del file</em>, e che ci serve per riferici al file con le funzioni che lo manipolano (sarà chiaro poco più avanti cosa questo vuol dire). Qual è il tipo di dato del descrittore? Un intero? Una stringa? Nossignore: è un tipo di dato appositamente definito, nel file <code>stdio.h</code>, che si chiama <code>FILE</code>. Un descrittore ad un file è un puntatore ad una struttura di tipo <code>FILE</code>, e quindi si dichiarerà così:</p>
+<div class='highlight'><pre><code class='c'><span class='kt'>FILE</span> <span class='o'>*</span><span class='n'>f</span><span class='p'>;</span>
+</code></pre>
+</div>
+<p>Immaginiamo di voler aprire un file dove mettere il nostro numero. Chiamiamolo <code>numero.dat</code>. Faremo così:</p>
+<div class='highlight'><pre><code class='c'>    
+<span class='n'>f</span> <span class='o'>=</span> <span class='n'>fopen</span><span class='p'>(</span><span class='s'>&quot;numero.dat&quot;</span><span class='p'>,</span><span class='s'>&quot;w&quot;</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>La <code>&quot;w&quot;</code> come modalità vuol dire che sul file vorremo scrivere. Ora chiediamo all&#8217;utente il numero:</p>
+<div class='highlight'><pre><code class='c'><span class='n'>scanf</span> <span class='p'>(</span><span class='s'>&quot;%i&quot;</span><span class='p'>,</span><span class='o'>&amp;</span><span class='n'>numero</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>Ok, ora in <code>numero</code> c&#8217;è il numero inserito dall&#8217;utente. Come facciamo a scriverlo? Attenti bene, il segreto è questo: <em>dobbiamo copiare la porzione di memoria che contiene il numero <code>num</code> sul file</em>. La libreria standard ci fornisce qualcosa che fa esattamente al caso nostro: la funzione <a href='http://it.wikibooks.org/wiki/C/Appendice/Librerie_standard/stdio.h#fwrite.28.29'><code>fwrite</code></a>.</p>
+
+<p>Il prototipo di <code>fwrite</code> è il seguente:</p>
+<div class='highlight'><pre><code class='c'><span class='kt'>size_t</span> <span class='n'>fwrite</span><span class='p'>(</span><span class='k'>const</span> <span class='kt'>void</span> <span class='o'>*</span> <span class='n'>data</span><span class='p'>,</span> <span class='kt'>size_t</span> <span class='n'>size</span><span class='p'>,</span> <span class='kt'>size_t</span> <span class='n'>count</span><span class='p'>,</span> <span class='kt'>FILE</span><span class='o'>*</span> <span class='n'>stream</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>Soffermiamoci un attimo su questo prototipo, considerando ad uno ad uno i suoi parametri:</p>
+
+<pre><code>const void * data</code></pre>
+
+<p>Il primo parametro è un puntatore (<code>*</code>) ad un dato di tipo <code>void</code>: questo significa che <code>fwrite</code> non si interessa al tipo dei dati che vogliamo scrivere sul disco (se avessimo avuto un parametro del tipo <code>const int * data</code> avrebbe voluto dire che stavamo considerando degli interi, ad esempio&#8230;). Il modificatore <code>const</code>, invece, significa che <code>fwrite</code> si impegna a non modificare la memoria alla quale punta <code>data</code>, e questo ha senso: <code>fwrite</code> accederà alla memoria solo per leggere dei dati e scriverli su disco, e possiamo stare tranquilli che i dati in memoria non saranno modificati.</p>
+
+<pre><code>size_t size</code></pre>
+
+<p>Questo parametro rappresenta la dimensione del singolo blocco che vogliamo scrivere su disco. Nel nostro caso, sarà il numero di parole di memoria con cui è rappresentato un intero. E quante sono queste parole? Ma <code>sizeof(int)</code>, naturalmente!</p>
+
+<pre><code>size_t count</code></pre>
+
+<p>Questo parametro rappresenta il numero di blocchi che vogliamo copiare dalla memoria al file. E&#8217; un parametro molto utile quando vogliamo copiare interi array. Nel nostro caso, qui passeremo un <code>1</code>, visto vogliamo scrivere un solo intero.</p>
+
+<pre><code>FILE* stream</code></pre>
+
+<p>Qui è dove diciamo a <code>fwrite</code> su quale file vogliamo scrivere (il <em>descrittore</em> di poco fa). Siamo pronti per scrivere l&#8217;invocazione a <code>fwrite</code> che memorizza il nostro numero sul file appena aperto:</p>
+
+<pre><code>fwrite(&amp;n, sizeof(int), 1, f);</code></pre>
+
+<p>Et voilà! I byte che codificano il numero intero alla locazione <code>&amp;n</code> sono ora copiati sul file <code>numero.dat</code>.</p>
+
+<p>Ora si tratta di leggerli&#8230;</p>
+
+<p>Per leggerli, possiamo basarci sulla funzione simmetrica di <code>fwrite</code>: <a href='http://linux.about.com/library/cmd/blcmdl3_fread.htm'><code>fread</code></a></p>
+<div class='highlight'><pre><code class='c'><span class='kt'>size_t</span> <span class='n'>fread</span><span class='p'>(</span><span class='kt'>void</span> <span class='o'>*</span><span class='n'>ptr</span><span class='p'>,</span> <span class='kt'>size_t</span> <span class='n'>size</span><span class='p'>,</span> <span class='kt'>size_t</span> <span class='n'>nmemb</span><span class='p'>,</span> <span class='kt'>FILE</span> <span class='o'>*</span><span class='n'>stream</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>Il codice del programma che legge il numero che abbiamo scritto nel file e lo stampa lo trovate qui: <a href='stampa_numero.c'>stampa_numero</a></p>
+
+<p>Il codice per salvare il numero su file invece è: <a href='salva_numero.c'>salva_numero</a></p>
+
+<h3 id='file_di_testo_ascii'>File di testo (ASCII)</h3>
+
+<p>Nell&#8217;esempio precedente, la sequenza di byte presente nel file <code>numero.dat</code> rappresenta un numero intero. Ci sono file nei quali, invece, ogni byte rappresenta un carattere ASCII. Un esempio è <a href='ofrati.txt'>questo</a>. Come forse i più raffinati culturalmente avranno notato, il testo contiene un pedestre errore di trascrizione. Come possiamo correggerlo? Poniamoci questo obiettivo: vogliamo trascrivere il testo in un altro file, del tutto uguale, ma in cui &#8220;bruchi&#8221; sia stato sostituito con &#8220;bruti&#8221;. Tra tutte le innumerevoli possibili soluzioni, vi propongo questa: prendiamo il file originario, lo copiamo in memoria, in una stringa; dopodiché lo scandiamo, carattere per carattere, e trascriviamo ogni carattere in un file destinazione, fino a quando ci imbattiamo nella parola incriminata (&#8220;bruchi&#8221;): a questo punto, sul file destinazione scriviamo la parola corretta (&#8220;bruti&#8221;), nella copia in memoria saltiamo la parola incriminata, e continuiamo sereni.</p>
+
+<p>Ok, cominciamo&#8230;</p>
+
+<p>Prima di tutto:</p>
+
+<p>Q: Quanta memoria ci serve, per contenere tutto il file?</p>
+
+<p>A: Beh, ci servono tanti <code>char</code> quanti sono quelli nel file. Visto che nel file ogni carattere è memorizzato con un byte, ci servono tanti <code>char</code> quanti sono i byte nel file</p>
+
+<p>Q: Fantastico. Ma: come faccio a sapere quanti byte occupa il file?</p>
+
+<p>A: Uso il seguente trucchetto: apro il file, sposto il puntatore di scrittura alla fine, e vedo quanto è distante dall&#8217;inizio. Per fare questo mi servo di due funzioni della libreria <code>stdio</code>: <a href='http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#fseek'><code>fseek</code></a> e <a href='http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#ftell'><code>ftell</code></a></p>
+
+<p><code>fseek</code>, in particolare, mi consente di spostarmi nel file, specificando un <em>offset</em> e una <em>posizione di riferimento</em>, che può essere: l&#8217;inizio del file (<code>SEEK_SET</code>), la posizione corrente (<code>SEEK_CUR</code>), oppure la fine del file (<code>SEEK_END</code>). quindi:</p>
+<div class='highlight'><pre><code class='c'><span class='n'>fseek</span><span class='p'>(</span><span class='n'>f</span><span class='p'>,</span> <span class='mi'>0</span><span class='p'>,</span> <span class='n'>SEEK_END</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>ci posiziona, nel file, alla fine (a 0 byte dalla fine). A questo punto, <code>ftell(f)</code> ci dice a quanti byte siamo dall&#8217;inizio, quantità che corrisponde alla lunghezza del file:</p>
+<div class='highlight'><pre><code class='c'><span class='n'>len</span><span class='o'>=</span><span class='n'>ftell</span><span class='p'>(</span><span class='n'>f</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>Per riposizionarci all&#8217;inizio del file (dobbiamo ancora rileggerlo), usiamo la funzione <a href='http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#rewind'><code>rewind</code></a>.</p>
+
+<p>A questo punto, possiamo allocare la memoria che ci serve:</p>
+<div class='highlight'><pre><code class='c'>    <span class='n'>testo</span><span class='o'>=</span><span class='n'>malloc</span><span class='p'>(</span><span class='k'>sizeof</span><span class='p'>(</span><span class='kt'>char</span><span class='p'>)</span><span class='o'>*</span><span class='p'>(</span><span class='n'>len</span><span class='o'>+</span><span class='mi'>1</span><span class='p'>));</span>
+</code></pre>
+</div>
+<p>(il <code>+1</code> serve per fare spazio al terminatore di stringa).</p>
+
+<p>Leggiamo il file e mettiamo il contenuto nella memoria allocata:</p>
+<div class='highlight'><pre><code class='c'><span class='n'>fread</span><span class='p'>(</span><span class='n'>testo</span><span class='p'>,</span><span class='k'>sizeof</span><span class='p'>(</span><span class='kt'>char</span><span class='p'>),</span><span class='n'>len</span><span class='p'>,</span><span class='n'>f</span><span class='p'>);</span>
+<span class='n'>testo</span><span class='p'>[</span><span class='n'>len</span><span class='p'>]</span><span class='o'>=</span><span class='sc'>&#39;\0&#39;</span><span class='p'>;</span>
+</code></pre>
+</div>
+<p>Apriamo il file di destinazione:</p>
+<div class='highlight'><pre><code class='c'><span class='n'>dest</span><span class='o'>=</span><span class='n'>fopen</span><span class='p'>(</span><span class='s'>&quot;corretto.txt&quot;</span><span class='p'>,</span><span class='s'>&quot;w&quot;</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>Ora immaginiamo di avere una funzione, <code>is_inizio_parola(char* text, char* parola)</code>, che restituisce <code>1</code> se la stringa a cui punta <code>text</code> comincia con la stringa a cui punta <code>parola</code>. Se avessimo questa funzione, il seguente ciclo salverebbe la stringa contenuta in <code>testo</code> sul file <code>dest</code>, sostituendo ogni occorrenza della stringa <code>sbagliata</code> con la stringa <code>corretta</code>:</p>
+<div class='highlight'><pre><code class='c'><span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='n'>len</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+<span class='p'>{</span>
+    <span class='k'>if</span><span class='p'>(</span><span class='n'>is_inizio_parola</span><span class='p'>(</span><span class='o'>&amp;</span><span class='n'>testo</span><span class='p'>[</span><span class='n'>i</span><span class='p'>],</span><span class='n'>sbagliata</span><span class='p'>)</span><span class='o'>==</span><span class='mi'>0</span><span class='p'>)</span>
+        <span class='n'>fwrite</span><span class='p'>(</span><span class='o'>&amp;</span><span class='n'>testo</span><span class='p'>[</span><span class='n'>i</span><span class='p'>],</span><span class='k'>sizeof</span><span class='p'>(</span><span class='kt'>char</span><span class='p'>),</span><span class='mi'>1</span><span class='p'>,</span><span class='n'>dest</span><span class='p'>);</span>
+    <span class='k'>else</span>
+    <span class='p'>{</span>
+        <span class='n'>fwrite</span><span class='p'>(</span><span class='n'>corretta</span><span class='p'>,</span><span class='k'>sizeof</span><span class='p'>(</span><span class='kt'>char</span><span class='p'>),</span><span class='n'>strlen</span><span class='p'>(</span><span class='n'>corretta</span><span class='p'>),</span><span class='n'>dest</span><span class='p'>);</span>
+        <span class='n'>i</span><span class='o'>+=</span><span class='n'>strlen</span><span class='p'>(</span><span class='n'>sbagliata</span><span class='p'>)</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>;</span>
+    <span class='p'>}</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>La funzione <code>is_inizio_parola</code> si può implementare così:</p>
+<div class='highlight'><pre><code class='c'><span class='kt'>int</span> <span class='nf'>is_inizio_parola</span><span class='p'>(</span><span class='kt'>char</span><span class='o'>*</span> <span class='n'>testo</span><span class='p'>,</span> <span class='kt'>char</span><span class='o'>*</span> <span class='n'>parola</span><span class='p'>)</span> <span class='c1'>// testo comincia con parola?</span>
+<span class='p'>{</span>
+    <span class='kt'>int</span> <span class='n'>i</span><span class='p'>;</span>
+    <span class='kt'>int</span> <span class='n'>len</span><span class='o'>=</span><span class='n'>strlen</span><span class='p'>(</span><span class='n'>parola</span><span class='p'>);</span>
+
+    <span class='k'>for</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span><span class='n'>i</span><span class='o'>&lt;</span><span class='n'>len</span> <span class='o'>&amp;&amp;</span> <span class='n'>testo</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span><span class='o'>!=</span><span class='sc'>&#39;\0&#39;</span><span class='p'>;</span><span class='n'>i</span><span class='o'>++</span><span class='p'>)</span>
+    <span class='p'>{</span>
+        <span class='k'>if</span><span class='p'>(</span><span class='n'>parola</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span> <span class='o'>!=</span> <span class='n'>testo</span><span class='p'>[</span><span class='n'>i</span><span class='p'>])</span>
+            <span class='k'>return</span> <span class='mi'>0</span><span class='p'>;</span>
+    <span class='p'>}</span>
+
+    <span class='k'>if</span> <span class='p'>(</span><span class='n'>i</span><span class='o'>==</span><span class='n'>len</span><span class='p'>)</span> <span class='k'>return</span> <span class='mi'>1</span><span class='p'>;</span>
+
+    <span class='k'>return</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p><a href='correggi2.c'>Ecco</a> il codice completo. <!--Il codice--></p>
+<!--`fwrite` funziona così: considera la memoria a partire dall'indirizzo indicato dal puntatore `data`--><!--Innanzitutto proviamo a risolvere questo problema: vogliamo chiedere all'utente alcune informazioni anagrafiche che lo descrivono, e vogliamo quindi salvarle su un file, su disco. Successivamente, vogliamo accedere a quelle stesse informazioni, e stamparle a video.--><!--Le informazioni che vogliamo memorizzare in modo permanente su file sono:--><!--1. Nome--><!--2. Cognome--><!--3. Numero di telefono--><!--C-->
+
+    
+  </div>
+</div>
+
+
+      </div>
+
+      <footer>
+        <p>&copy;  2012 
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+        </p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
+
