@@ -12,4 +12,5 @@ author: Francesco Bruschi
 -   [file](file)
 -   [fork](fork)
 -   [minimax](minimax)
+-   [esercizi analisi](code_analysis)
 
