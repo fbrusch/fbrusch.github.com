@@ -1,0 +1,3 @@
+[submodule "didattica/fondamenti/code_analysis"]
+	path = didattica/fondamenti/code_analysis
+	url = https://github.com/fbrusch/code_analysis.git
