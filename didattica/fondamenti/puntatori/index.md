@@ -53,7 +53,7 @@ Ma cosa vuole dire che il compilatore _alloca_ memoria per la variabile `a`? Vuo
 In questo modo, se dovesse incontrare un'altra dichiarazione, tipo `char b`, avrebbe tutta l'informazione per allocare una zona di memoria diversa.
 Ora: successivamente, tutte le operazioni che utilizzano il valore di `a` vengono trasformate in letture alle celle 100 e 101, e tutte quelle che modificano il valore di `a` vengono tradotte in scritture alle stesse celle.
 
-E per gli array?
+E per gli array??
 
     int a[10];
 
