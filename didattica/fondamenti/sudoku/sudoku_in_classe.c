@@ -89,7 +89,7 @@ int risolvi_sudoku(int s[DIM][DIM])
 }
 
 
-int stampa_sudoku(int s[DIM][DIM])
+void stampa_sudoku(int s[DIM][DIM])
 {
     int i,j;
 
