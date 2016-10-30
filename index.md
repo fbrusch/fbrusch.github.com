@@ -8,6 +8,7 @@ author: Francesco Bruschi
 ## Didattica
 
 - [Fondamenti di Informatica](didattica/fondamenti)
+- [Laboratorio di Computer Grafica](didattica/lcg)
 
 <!--## Progetti-->
 
